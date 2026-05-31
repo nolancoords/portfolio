@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>About Me</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#050505;
+    color:#e8e1d4;
+    font-family:'Space Mono', monospace;
+    overflow-x:hidden;
+    position:relative;
+}
+
+.element-class {
+      scrollbar-width: none;          
+      -ms-overflow-style: none;      
+  }
+
+  .element-class::-webkit-scrollbar {
+      display: none;                
+  }
+/* =====================================
+   GRID
+===================================== */
+
+
+/* =====================================
+   STOCK TICKER NUMBERS
+===================================== */
+
+.stock-bg{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    z-index:-3;
+}
+
+.ticker{
+    position:absolute;
+    opacity: 10%;
+
+    font-size:1rem;
+    white-space:nowrap;
+    animation:scrollDown linear infinite;
+}
+
+@keyframes scrollDown{
+    from{
+        transform:translateY(-150px);
+    }
+    to{
+        transform:translateY(110vh);
+    }
+}
+
+/* =====================================
+   FLOATING CODE
+===================================== */
+
+.code{
+    right: 4rem;
+    opacity: 25%;
+    position: fixed;
+    color:rgba(255,255,255,.08);
+    font-size:1rem;
+    pointer-events:none;
+    z-index:-1;
+    animation: shadow-dance 2s infinite;
+}
+
+
+.code1{
+    top:100px;
+    right:10%;
+}
+
+.code2{
+    bottom:150px;
+    left:5%;
+}
+
+/* =====================================
+   HERO
+===================================== */
+
+.hero{
+    text-align:center;
+    padding-top:120px;
+}
+
+.hero h1{
+    font-size:4rem;
+    letter-spacing:10px;
+}
+
+.hero p{
+    margin-top:20px;
+    letter-spacing:4px;
+    color:#cfc6b7;
+}
+
+
+.links { 
+  text-align: center;
+  padding-top: 120px;
+  font-size: medium;
+}
+
+/* =====================================
+   CONTENT
+===================================== */
+
+.container{
+    width:min(900px,90%);
+    margin:auto;
+    padding:80px 0;
+}
+
+.section{
+    border:1px solid rgba(255,255,255,.8);
+    margin-bottom:40px;
+    padding:40px;
+    background:rgba(0,0,0,.3);
+    backdrop-filter:blur(2px);
+
+}
+
+.section-title{
+    font-size:1.4rem;
+    letter-spacing:4px;
+    margin-bottom:25px;
+}
+
+.section p{
+    line-height:1.8;
+    color:#d8d1c4;
+}
+
+.skill-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:20px;
+}
+
+.skill{
+    border:1px solid rgba(255,255,255,.4);
+    padding:18px;
+    text-align:center;
+    cursor:pointer;
+    background:none;
+    color:#e8e1d4;
+    font-family:'Space Mono', monospace;
+    font-size:1rem;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    width:100%;
+}
+
+.skill:hover{
+    border-color:rgba(255,255,255,1);
+    background:rgba(255,255,255,.05);
+    transform:translateY(-2px);
+}
+
+/* =====================================
+   SKILL MODAL
+===================================== */
+
+.modal-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:9000;
+    background:rgba(0,0,0,.75);
+    backdrop-filter:blur(4px);
+    align-items:center;
+    justify-content:center;
+    animation:fadeOverlay .2s ease;
+}
+
+.modal-overlay.active{ display:flex; }
+
+@keyframes fadeOverlay{
+    from{opacity:0;}
+    to{opacity:1;}
+}
+
+.modal-box{
+    background:#0d0d0d;
+    border:1px solid rgba(255,255,255,.25);
+    width:min(480px,90vw);
+    max-height:80vh;
+    display:flex;
+    flex-direction:column;
+    animation:popIn .22s cubic-bezier(0.34,1.56,0.64,1);
+    box-shadow:0 0 60px rgba(255,255,255,.04), 0 20px 60px rgba(0,0,0,.7);
+}
+
+@keyframes popIn{
+    from{opacity:0;transform:scale(.93);}
+    to{opacity:1;transform:scale(1);}
+}
+
+.modal-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 20px;
+    border-bottom:1px solid rgba(255,255,255,.1);
+    flex-shrink:0;
+}
+
+.modal-title{
+    font-size:.7rem;
+    letter-spacing:.2em;
+    color:#999;
+    text-transform:uppercase;
+}
+
+.modal-title span{
+    color:#e8e1d4;
+}
+
+.modal-close{
+    background:none;
+    border:1px solid rgba(255,255,255,.2);
+    color:#888;
+    width:26px;
+    height:26px;
+    cursor:pointer;
+    font-size:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Space Mono', monospace;
+    transition:border-color .15s, color .15s;
+}
+
+.modal-close:hover{
+    border-color:rgba(255,255,255,.7);
+    color:#e8e1d4;
+}
+
+.modal-body{
+    overflow-y:auto;
+    padding:20px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    scrollbar-width:thin;
+    scrollbar-color:#2a2a2a transparent;
+}
+
+.modal-body::-webkit-scrollbar{ width:3px; }
+.modal-body::-webkit-scrollbar-thumb{ background:#2a2a2a; }
+
+.modal-empty{
+    color:#555;
+    font-size:.75rem;
+    letter-spacing:.1em;
+    text-align:center;
+    padding:20px 0;
+}
+
+.modal-project{
+    border:1px solid rgba(255,255,255,.12);
+    padding:14px 16px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    transition:border-color .2s;
+}
+
+.modal-project:hover{
+    border-color:rgba(255,255,255,.35);
+}
+
+.modal-project-meta{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+}
+
+.modal-project-source{
+    font-size:.58rem;
+    letter-spacing:.15em;
+    color:#555;
+    text-transform:uppercase;
+}
+
+.modal-project-name{
+    font-size:.85rem;
+    letter-spacing:.05em;
+    color:#e8e1d4;
+}
+
+.modal-project-link{
+    font-size:.65rem;
+    letter-spacing:.1em;
+    color:#c8f542;
+    text-decoration:none;
+    opacity:.7;
+    white-space:nowrap;
+    flex-shrink:0;
+}
+
+.modal-project-link:hover{ opacity:1; }
+
+.education-item{
+    margin-bottom:20px;
+}
+
+.education-item h3{
+    margin-bottom:5px;
+}
+
+.education-item span{
+    color:#888;
+}
+
+/* =====================================
+   FOOTER
+===================================== */
+
+footer{
+    text-align:center;
+    padding:80px 20px;
+    color:#666;
+    letter-spacing:3px;
+}
+
+/* =====================================
+   CLICK BUBBLES
+===================================== */
+
+.bubble{
+    position:fixed;
+    border-radius:50%;
+    pointer-events:none;
+    border:1px solid rgba(255,255,255,.8);
+    animation:floatUp 4s linear forwards;
+}
+
+@keyframes floatUp{
+    0%{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+
+    100%{
+        opacity:0;
+        transform:translateY(-300px) scale(1.8);
+    }
+}
+
+@keyframes shadow-dance {
+    0%, 100% {
+        text-shadow: 5px 5px 0 #ffff, 10px 10px 0 #0000;
+    }
+    50% {
+        text-shadow: -5px -5px 0 #0000, -10px -10px 0 #ffff;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<div class="stock-bg" id="stock-bg"></div>
+
+<div class="code code2">
+import sys, os, warnings
+<br>
+import matplotlib<br>
+import numpy                as np
+<br>
+import matplotlib.pyplot    as plt
+<br>
+import matplotlib.gridspec  as gridspec
+<br>
+import pandas               as pd
+<br>
+import yfinance             as yf
+<br>
+import quantsim             # C++/pybind11 — all math lives here
+<br>
+
+</div>
+
+<section class="hero">
+    <h1>Nolan Coords</h1>
+    <p>Electrical Engineering Student and Developer</p>
+</section>
+
+<div class="links">
+  <a href="https://www.linkedin.com/in/nolan-coords">linkedin</a>
+  <a href="https://github.com/nolancoords">github</a>
+  <div>nolancoords@gmail.com</div>
+</div>
+
+<div class="container">
+
+    <div class="section">
+        <div class="section-title">ABOUT</div>
+
+        <p>
+            I am an Electrical Engineering student studying at North Carolina State University, and I enjoy making a wide variety of things. I am currently studying to go into the power industry, and hope to also gain insight into embedded systems and software simulation. 
+            
+        </p>
+        <p>
+           My expirience mostly comes from either school or my <a ="http://127.0.0.1:5500/software.html">projects</a>. As I have many interests, my projects often reflect that. I have built projects in areas of power systems, embedded systems, quantitative trading, web development, physics modeling, and games. 
+
+        </p>
+        <p>
+                      I am also a current intern working for HBK Engineering in Raleigh, where I am focusing on power systems analysis, field data collection, and CAD based design workflows. 
+
+        </p>
+    </div>
+
+    <div class="section">
+        <div class="section-title">EDUCATION</div>
+
+        <div class="education-item">
+            <h3>NC State</h3>
+            <span>Electrical Engineering • Expected May 2028</span>
+        </div>
+
+        <div class="education-item">
+            <h3>Relevant Coursework</h3>
+            <span>ECE 109 (Assembly), CSCI 273 (Python), ECE 220 (MATLAB), ECE 209 (C/C++), ECE 200 (Signals & Systems) 
+</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">SE SKILLS</div>
+
+        <div class="skill-grid">
+            <button class="skill" data-skill="Python">Python</button>
+            <button class="skill" data-skill="C/C++">C/C++</button>
+            <button class="skill" data-skill="HTML/CSS/JS">HTML/CSS/JS</button>
+            <button class="skill" data-skill="Mathematics">Mathematics</button>
+            <button class="skill" data-skill="Matplotlib">Matplotlib</button>
+            <button class="skill" data-skill="Lua">Lua</button>
+            <button class="skill" data-skill="Pandas">Pandas</button>
+            <button class="skill" data-skill="NumPy">NumPy</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">EE SKILLS</div>
+
+        <div class="skill-grid">
+            <button class="skill" data-skill="KiCAD">KiCAD</button>
+            <button class="skill" data-skill="AutoCAD">AutoCAD</button>
+            <button class="skill" data-skill="MATLAB">MATLAB</button>
+            <button class="skill" data-skill="Simulink">Simulink</button>
+            <button class="skill" data-skill="Microcontroller Programming">Microcontroller Programming</button>
+            <button class="skill" data-skill="Oscilliscope">Oscilliscope</button>
+            <button class="skill" data-skill="Microsoft Excel">Microsoft Excel</button>
+            <button class="skill" data-skill="Physics Modeling">Physics Modeling</button>
+        </div>
+    </div>
+
+    <div class="section">
+    <div class="section-title">SPACE INVADERS</div>
+    <div id="game-wrapper" style="text-align:center;">
+        <div id="game-hud" style="display:flex;justify-content:space-between;margin-bottom:12px;letter-spacing:3px;font-size:.8rem;color:#888;">
+            <span>SCORE: <span id="score">0</span></span>
+            <span id="game-msg">PRESS SPACE TO START</span>
+            <span>LIVES: <span id="lives">♦ ♦ ♦</span></span>
+        </div>
+        <canvas id="gameCanvas" width="820" height="420"
+            style="border:1px solid rgba(255,255,255,.8);background:#000;max-width:100%;display:block;margin:auto;">
+        </canvas>
+        <div style="margin-top:12px;color:#555;font-size:.7rem;letter-spacing:2px;">
+            ← → MOVE &nbsp;|&nbsp; SPACE SHOOT &nbsp;|&nbsp; HOLD SHIFT FOR RAPID
+        </div>
+    </div>
+
+    <script>
+    (()=>{
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const scoreEl = document.getElementById("score");
+        const livesEl = document.getElementById("lives");
+        const msgEl   = document.getElementById("game-msg");
+
+        // ── Assets (swap these paths for your actual sprites) ──────────────
+        const IMG = {
+            player:  loadImg("assets/player.png"),
+            inv1:    loadImg("assets/inv1.png"),
+            inv2:    loadImg("assets/inv2.png"),
+            inv3:    loadImg("assets/inv3.png"),
+            bullet:  loadImg("assets/bullet.png"),
+            bomb:    loadImg("assets/bomb.png"),
+            ufo:     loadImg("assets/ufo.png"),
+        };
+        function loadImg(src){
+            const i=new Image(); i.src=src; return i;
+        }
+
+        // ── Constants ────────────────────────────────────────────────────────
+        const W=canvas.width, H=canvas.height;
+        const ROWS=4, COLS=11, INV_W=38, INV_H=28, HGAP=14, VGAP=16;
+        const GRID_W = COLS*(INV_W+HGAP)-HGAP;
+        const PLAYER_W=42, PLAYER_H=28, BULLET_W=4, BULLET_H=14;
+        const BUNKER_COLOR="rgba(255,255,255,0.85)";
+
+        // ── State ─────────────────────────────────────────────────────────────
+        let state="idle",score=0,lives=3,frame=0,animTick=0,flashTimer=0;
+        let playerX, bullets, bombs, invaders, bunkers, ufo;
+        let invDir=1, invStepTimer=0, invStepDelay=60;
+        let keys={};
+
+        // ── Input ─────────────────────────────────────────────────────────────
+        document.addEventListener("keydown",e=>{
+            if(["Space","ArrowLeft","ArrowRight","ShiftLeft","ShiftRight"].includes(e.code)) e.preventDefault();
+            keys[e.code]=true;
+            if(e.code==="Space"){
+                if(state==="idle"||state==="dead") initGame(), state="playing";
+            }
+        });
+        document.addEventListener("keyup",e=>{ keys[e.code]=false; });
+
+        // ── Init ──────────────────────────────────────────────────────────────
+        function initGame(){
+            score=0; lives=3; frame=0; animTick=0;
+            invDir=1; invStepDelay=60; invStepTimer=0;
+            scoreEl.textContent=score;
+            livesEl.textContent="♦ ".repeat(lives).trim();
+            msgEl.textContent="";
+
+            playerX = W/2 - PLAYER_W/2;
+
+            bullets=[]; bombs=[];
+
+            // Build invader grid
+            invaders=[];
+            const startX=(W-GRID_W)/2;
+            for(let r=0;r<ROWS;r++){
+                for(let c=0;c<COLS;c++){
+                    invaders.push({
+                        x: startX + c*(INV_W+HGAP),
+                        y: 60 + r*(INV_H+VGAP),
+                        row:r, alive:true,
+                        img: r===0 ? IMG.inv3 : r<=1 ? IMG.inv2 : IMG.inv1
+                    });
+                }
+            }
+
+            // UFO
+            ufo={active:false,x:-60,y:28,dir:1,timer:0};
+
+            // Bunkers
+            bunkers=[];
+            const bw=60,bh=36,bx=[W*.18,W*.38,W*.58,W*.78];
+            for(const bxx of bx){
+                for(let brow=0;brow<bh;brow+=4){
+                    for(let bcol=0;bcol<bw;bcol+=4){
+                        // Arch cutout
+                        const cx=bxx+bw/2, cy=bx[0]; // reuse bxx as placeholder
+                        // rounded top arch cutout
+                        const relX=bcol-bw/2, relY=brow;
+                        if(relY<18 && relX*relX+relY*relY < 200) continue;
+                        // bottom notch
+                        if(brow>bh-12 && Math.abs(bcol-bw/2)<16) continue;
+                        bunkers.push({x:bxx+bcol,y:H-120+brow,w:4,h:4,hp:3});
+                    }
+                }
+            }
+        }
+
+        // ── Shoot ─────────────────────────────────────────────────────────────
+        let shootCooldown=0, rapidTimer=0;
+        function tryShoot(){
+            if(shootCooldown>0) return;
+            const rapid = keys["ShiftLeft"]||keys["ShiftRight"];
+            const maxBullets = rapid ? 3 : 1;
+            if(bullets.length<maxBullets){
+                bullets.push({x:playerX+PLAYER_W/2-BULLET_W/2, y:H-80, w:BULLET_W, h:BULLET_H, speed:9});
+                shootCooldown = rapid ? 8 : 22;
+            }
+        }
+
+        function invaderShoot(){
+            const alive=invaders.filter(i=>i.alive);
+            if(!alive.length) return;
+            // pick a random front-column invader
+            const cols=[...new Set(alive.map(i=>Math.round(i.x)))];
+            const frontPerCol={};
+            for(const inv of alive){
+                const k=Math.round(inv.x);
+                if(!frontPerCol[k]||inv.y>frontPerCol[k].y) frontPerCol[k]=inv;
+            }
+            const shooters=Object.values(frontPerCol);
+            if(Math.random()<0.015 && shooters.length){
+                const s=shooters[Math.floor(Math.random()*shooters.length)];
+                bombs.push({x:s.x+INV_W/2-3,y:s.y+INV_H,w:6,h:10,speed:3.5});
+            }
+        }
+
+        // ── Collision ─────────────────────────────────────────────────────────
+        function hit(a,b){
+            return a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
+        }
+
+        // ── Draw helpers ──────────────────────────────────────────────────────
+        function drawSprite(img,x,y,w,h){
+            if(img.complete&&img.naturalWidth){
+                ctx.drawImage(img,x,y,w,h);
+            } else {
+                // Fallback pixel rect while assets load
+                ctx.fillStyle="#e8e1d4";
+                ctx.fillRect(x,y,w,h);
+            }
+        }
+
+        // ── Main loop ─────────────────────────────────────────────────────────
+        function update(){
+            if(state!=="playing") return;
+            frame++; shootCooldown=Math.max(0,shootCooldown-1);
+            animTick = Math.floor(frame/20)%2;
+
+            // Player movement
+            const spd=4;
+            if(keys["ArrowLeft"])  playerX=Math.max(0,playerX-spd);
+            if(keys["ArrowRight"]) playerX=Math.min(W-PLAYER_W,playerX+spd);
+            if(keys["Space"]) tryShoot();
+
+            // Move bullets
+            bullets=bullets.filter(b=>{
+                b.y-=b.speed;
+                return b.y+b.h>0;
+            });
+
+            // Move bombs
+            bombs=bombs.filter(b=>{
+                b.y+=b.speed;
+                if(b.y>H) return false;
+                // hit player
+                const player={x:playerX,y:H-70,w:PLAYER_W,h:PLAYER_H};
+                if(hit(b,player)){
+                    loseLife();
+                    return false;
+                }
+                // hit bunker
+                for(const bk of bunkers){
+                    if(hit(b,bk)){ bk.hp--; return false; }
+                }
+                return true;
+            });
+
+            // Bullets vs invaders + bunkers
+            bullets=bullets.filter(bull=>{
+                for(const bk of bunkers){
+                    if(hit(bull,bk)){ bk.hp--; return false; }
+                }
+                for(const inv of invaders){
+                    if(inv.alive&&hit(bull,{x:inv.x,y:inv.y,w:INV_W,h:INV_H})){
+                        inv.alive=false;
+                        score+=(inv.row===0?30:inv.row<=1?20:10);
+                        scoreEl.textContent=score;
+                        return false;
+                    }
+                }
+                // hit ufo
+                if(ufo.active&&hit(bull,{x:ufo.x,y:ufo.y,w:60,h:22})){
+                    ufo.active=false;
+                    score+=100; scoreEl.textContent=score;
+                    flashTimer=30;
+                    return false;
+                }
+                return true;
+            });
+
+            // Remove dead bunker pixels
+            bunkers=bunkers.filter(b=>b.hp>0);
+
+            // Move invaders
+            invStepTimer++;
+            const alive=invaders.filter(i=>i.alive);
+            if(!alive.length){ state="win"; msgEl.textContent="YOU WIN — SPACE TO REPLAY"; return; }
+
+            const stepDelay=Math.max(8, invStepDelay - Math.floor((ROWS*COLS-alive.length)*1.2));
+            if(invStepTimer>=stepDelay){
+                invStepTimer=0;
+                const minX=Math.min(...alive.map(i=>i.x));
+                const maxX=Math.max(...alive.map(i=>i.x))+INV_W;
+                let drop=false;
+                if(invDir===1&&maxX+18>W){ invDir=-1; drop=true; }
+                if(invDir===-1&&minX-18<0){ invDir=1; drop=true; }
+                for(const inv of invaders){
+                    if(drop) inv.y+=16;
+                    else inv.x+=invDir*18;
+                }
+                // Check if invaders reached player
+                if(alive.some(i=>i.y+INV_H>H-80)){ state="dead"; msgEl.textContent="GAME OVER — SPACE TO RETRY"; return; }
+            }
+
+            invaderShoot();
+
+            // UFO
+            ufo.timer++;
+            if(!ufo.active&&ufo.timer>400+Math.random()*400){
+                ufo.active=true; ufo.dir=Math.random()<.5?1:-1;
+                ufo.x=ufo.dir===1?-60:W+10; ufo.timer=0;
+            }
+            if(ufo.active){
+                ufo.x+=ufo.dir*2.2;
+                if(ufo.x>W+80||ufo.x<-80) ufo.active=false;
+            }
+            if(flashTimer>0) flashTimer--;
+        }
+
+        function loseLife(){
+            lives--;
+            livesEl.textContent="♦ ".repeat(Math.max(0,lives)).trim()||"";
+            if(lives<=0){ state="dead"; msgEl.textContent="GAME OVER — SPACE TO RETRY"; }
+        }
+
+        function draw(){
+            ctx.clearRect(0,0,W,H);
+
+            // Scanline overlay
+            ctx.fillStyle="rgba(0,0,0,0.04)";
+            for(let y=0;y<H;y+=3) ctx.fillRect(0,y,W,1);
+
+            if(state==="idle"||state==="win"){
+                ctx.fillStyle="#e8e1d4";
+                ctx.font="bold 2rem 'Space Mono', monospace";
+                ctx.textAlign="center";
+                ctx.fillText(state==="idle"?"SPACE INVADERS":"STAGE CLEAR",W/2,H/2-20);
+                ctx.font=".8rem 'Space Mono', monospace";
+                ctx.fillStyle="#888";
+                ctx.fillText("PRESS SPACE TO "+(state==="idle"?"START":"PLAY AGAIN"),W/2,H/2+20);
+                ctx.textAlign="left";
+                return;
+            }
+
+            // Ground line
+            ctx.strokeStyle="rgba(255,255,255,.25)";
+            ctx.beginPath(); ctx.moveTo(0,H-44); ctx.lineTo(W,H-44); ctx.stroke();
+
+            // Player
+            drawSprite(IMG.player, playerX, H-70, PLAYER_W, PLAYER_H);
+
+            // Invaders
+            for(const inv of invaders){
+                if(!inv.alive) continue;
+                const img = animTick===0 ? inv.img : IMG.inv1; // simple 2-frame swap
+                drawSprite(img, inv.x, inv.y, INV_W, INV_H);
+            }
+
+            // UFO
+            if(ufo.active){
+                if(flashTimer>0&&flashTimer%4<2) ctx.globalAlpha=0;
+                drawSprite(IMG.ufo, ufo.x, ufo.y, 60, 22);
+                ctx.globalAlpha=1;
+                ctx.fillStyle="#e8e1d4";
+                ctx.font=".65rem 'Space Mono',monospace";
+                ctx.textAlign="center";
+                ctx.fillText("100",ufo.x+30,ufo.y-4);
+                ctx.textAlign="left";
+            }
+
+            // Bullets
+            for(const b of bullets) drawSprite(IMG.bullet, b.x, b.y, b.w, b.h);
+
+            // Bombs
+            for(const b of bombs)   drawSprite(IMG.bomb,   b.x, b.y, b.w, b.h);
+
+            // Bunkers
+            for(const bk of bunkers){
+                const alpha = bk.hp/3;
+                ctx.fillStyle=`rgba(232,225,212,${alpha})`;
+                ctx.fillRect(bk.x,bk.y,bk.w,bk.h);
+            }
+
+            // Game over overlay
+            if(state==="dead"){
+                ctx.fillStyle="rgba(0,0,0,.55)";
+                ctx.fillRect(0,0,W,H);
+                ctx.fillStyle="#e8e1d4";
+                ctx.font="bold 2rem 'Space Mono',monospace";
+                ctx.textAlign="center";
+                ctx.fillText("GAME OVER",W/2,H/2-16);
+                ctx.font=".8rem 'Space Mono',monospace";
+                ctx.fillStyle="#888";
+                ctx.fillText("PRESS SPACE TO RETRY",W/2,H/2+20);
+                ctx.textAlign="left";
+            }
+        }
+
+        function loop(){
+            update();
+            draw();
+            requestAnimationFrame(loop);
+        }
+
+        loop();
+    })();
+    </script>
+</div>
+
+</div>
+
+<footer>
+    NOLAN PETROSYAN © 2026
+</footer>
+
+<!-- ── SKILL MODAL ── -->
+<div class="modal-overlay" id="skillModal" onclick="handleModalOverlayClick(event)">
+  <div class="modal-box" id="skillModalBox">
+    <div class="modal-header">
+      <div class="modal-title">projects using — <span id="modalSkillName"></span></div>
+      <button class="modal-close" onclick="closeSkillModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+
+/* ===================================
+   STOCK NUMBERS
+=================================== */
+
+const stockBg = document.getElementById("stock-bg");
+
+for(let i=0;i<50;i++){
+
+    const row = document.createElement("div");
+
+    row.className = "ticker";
+
+    row.style.left = Math.random()*100 + "%";
+
+    row.style.animationDuration =
+        (12 + Math.random()*12) + "s";
+
+    row.style.animationDelay =
+        (-Math.random()*20) + "s";
+
+    function randomTicker(){
+        TICKERS = [
+        "AAPL","MSFT","NVDA","GOOGL","GOOG","AMZN","META","TSLA","AVGO","TSM",
+        "ASML","005930.KS","ORCL","ADBE","CRM","AMD","INTC","CSCO","IBM","QCOM",
+        "TXN","NFLX","PYPL","NOW","SNOW","PLTR","SHOP","SPOT","ZM","UBER",
+        "ABNB","MU","AMAT","LRCX","KLAC","ARM","MRVL","ROKU","SQ","CRWD",
+        "ZS","FTNT","TEAM","ADSK","WDAY","DDOG","MDB","BIDU","BABA","TCEHY","SAP"
+        ]
+
+        const price = (Math.random() * 1000).toFixed(2);
+
+        const change = ((Math.random() - 0.5) * 10).toFixed(2);
+
+        const ticker = TICKERS[Math.floor(Math.random() * TICKERS.length)];
+
+        return `${ticker} ${price} ${change}%`;
+    }
+
+    row.innerText = randomTicker();
+
+    setInterval(()=>{
+        row.innerText = randomTicker();
+    },1000);
+
+    stockBg.appendChild(row);
+}
+
+/* ===================================
+   SKILL MODAL
+=================================== */
+
+const SKILL_PROJECTS = {
+  "Python": [
+    { name:"Quantsim", source:"software", desc:"C++/Python quant analytics engine via pybind11", link:"https://github.com/Quant-App" },
+    { name:"Elastic Collision GUI", source:"software", desc:"Physics sim with SciPy, SymPy & Pygame", link:null },
+    { name:"Galaga++", source:"software", desc:"Reimagined arcade game with progressive AI", link:"https://github.com/Galaga-Enhanced" },
+    { name:"Wine Cellar App", source:"software", desc:"Recommendation logic for serving temps & decant times", link:null },
+  ],
+  "C/C++": [
+    { name:"Quantsim", source:"software", desc:"High-performance analytics engine exposed via pybind11", link:"https://github.com/Quant-App" },
+    { name:"8-Step Beat Drum Sequencer", source:"hardware", desc:"C++ arrays & pointers for note placement on Arduino", link:"https://github.com/nolancoords/8-step-drum-sequencer" },
+    { name:"Binary ALU", source:"hardware", desc:"Arduino UNO logic for LCD & LED bit display", link:null },
+  ],
+  "HTML/CSS/JS": [
+    { name:"NC Orthodox Church Navigator", source:"software", desc:"Full-stack website with Maps API & Firebase", link:"https://orthodoxnavigator.com" },
+    { name:"Wine Cellar App", source:"software", desc:"Frontend & backend collaborative web app", link:null },
+  ],
+  "Mathematics": [
+    { name:"Quantsim", source:"software", desc:"Rolling-window risk metrics: beta, Sharpe, CAGR, Ornstein-Uhlenbeck", link:"https://github.com/Quant-App" },
+    { name:"Elastic Collision GUI", source:"software", desc:"Systems of ODEs & linear equations via SciPy/SymPy", link:null },
+  ],
+  "Matplotlib": [
+    { name:"Quantsim", source:"software", desc:"Equity charts and portfolio risk visualizations", link:"https://github.com/Quant-App" },
+    { name:"Elastic Collision GUI", source:"software", desc:"Physics state visualization", link:null },
+  ],
+  "Lua": [],
+  "Pandas": [
+    { name:"Quantsim", source:"software", desc:"Tick data processing and rolling-window analytics", link:"https://github.com/Quant-App" },
+  ],
+  "NumPy": [
+    { name:"Quantsim", source:"software", desc:"Numerical computation for equity analysis", link:"https://github.com/Quant-App" },
+    { name:"Galaga++", source:"software", desc:"Array-based enemy position tracking", link:"https://github.com/Galaga-Enhanced" },
+  ],
+  "KiCAD": [
+    { name:"8-Step Beat Drum Sequencer", source:"hardware", desc:"PCB schematic design", link:"https://github.com/nolancoords/8-step-drum-sequencer" },
+    { name:"Binary ALU", source:"hardware", desc:"PCB schematic design", link:null },
+  ],
+  "AutoCAD": [],
+  "MATLAB": [],
+  "Simulink": [],
+  "Microcontroller Programming": [
+    { name:"8-Step Beat Drum Sequencer", source:"hardware", desc:"Arduino-based sequencer with buzzer prototype", link:"https://github.com/nolancoords/8-step-drum-sequencer" },
+    { name:"Binary ALU", source:"hardware", desc:"Arduino UNO driving LCD & LED outputs", link:null },
+  ],
+  "Oscilliscope": [
+    { name:"8-Step Beat Drum Sequencer", source:"hardware", desc:"Signal verification during prototyping", link:"https://github.com/nolancoords/8-step-drum-sequencer" },
+  ],
+  "Microsoft Excel": [],
+  "Physics Modeling": [
+    { name:"Elastic Collision GUI", source:"software", desc:"Elastic collision simulation with real-time physics", link:null },
+  ],
+};
+
+function openSkillModal(skill) {
+  const projects = SKILL_PROJECTS[skill] || [];
+  document.getElementById("modalSkillName").textContent = skill;
+
+  const body = document.getElementById("modalBody");
+  body.innerHTML = "";
+
+  if (!projects.length) {
+    body.innerHTML = `<div class="modal-empty">// no linked projects yet</div>`;
+  } else {
+    projects.forEach(p => {
+      const el = document.createElement("div");
+      el.className = "modal-project";
+      el.innerHTML = `
+        <div class="modal-project-meta">
+          <span class="modal-project-source">${p.source}</span>
+          ${p.link ? `<a class="modal-project-link" href="${p.link}" target="_blank">view project →</a>` : ""}
+        </div>
+        <div class="modal-project-name">${p.name}</div>
+        <div style="font-size:.7rem;color:#666;letter-spacing:.04em;line-height:1.5;">${p.desc}</div>
+      `;
+      body.appendChild(el);
+    });
+  }
+
+  document.getElementById("skillModal").classList.add("active");
+  document.body.style.overflow = "hidden";
+}
+
+function closeSkillModal() {
+  document.getElementById("skillModal").classList.remove("active");
+  document.body.style.overflow = "";
+}
+
+function handleModalOverlayClick(e) {
+  if (e.target === document.getElementById("skillModal")) closeSkillModal();
+}
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeSkillModal();
+});
+
+document.querySelectorAll(".skill[data-skill]").forEach(btn => {
+  btn.addEventListener("click", e => {
+    e.stopPropagation();
+    openSkillModal(btn.dataset.skill);
+  });
+});
+
+/* ===================================
+   CLICK BUBBLES
+=================================== */
+
+document.addEventListener("click",(e)=>{
+
+    for(let i=0;i<6;i++){
+
+        const bubble =
+            document.createElement("div");
+
+        bubble.className = "bubble";
+
+        const size =
+            10 + Math.random()*30;
+
+        bubble.style.width =
+            size + "px";
+
+        bubble.style.height =
+            size + "px";
+
+        bubble.style.left =
+            (e.clientX + (Math.random()*60-30))
+            + "px";
+
+        bubble.style.top =
+            (e.clientY + (Math.random()*40-20))
+            + "px";
+
+        document.body.appendChild(bubble);
+
+        setTimeout(()=>{
+            bubble.remove();
+        },4000);
+    }
+});
+
+</script>
+
+</body>
+</html>

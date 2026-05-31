@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --fg: #e8e4dc;
+    --accent: #c8f542;
+    --muted: #3a3a3a;
+    --border: 2px solid #2a2a2a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  .element-class {
+      scrollbar-width: none;          
+      -ms-overflow-style: none;      
+  }
+
+  .element-class::-webkit-scrollbar {
+      display: none;                
+  }
+
+  canvas { position: fixed; inset: 0; pointer-events: none; }
+  #canvas-click { pointer-events: all; z-index: 4; }
+  #canvas-physics { z-index: 2; }
+  #canvas-quant { z-index: 2; }
+  #canvas-led { z-index: 2; }
+
+  /* ── LED CIRCUIT DIAGRAM (Top Left) ── */
+  .circuit-container {
+    position: absolute;
+    bottom: 2rem;
+    right: .5rem;
+    z-index: 5;
+    background: rgba(10, 10, 10, 0.8);
+    border: 1px solid var(--muted);
+    padding: 1rem;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    pointer-events: all;
+  }
+
+  .circuit-header {
+      padding: 10px;
+      background-color: white;
+      color: #ffffff;
+      cursor: move; /* Changes cursor to a crosshair indicator */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top-left-radius: 2px;
+      border-top-right-radius: 2px;
+      user-select: none;
+  }
+
+  .circuit-svg {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 2px;
+  }
+
+  /* LED Glow Animation and states */
+  .led-element {
+    transition: fill 0.1s ease, filter 0.1s ease;
+    z-index: 2;
+  }
+  
+  .led-glow {
+    opacity: 0;
+    transition: opacity 0.1s ease;
+    z-index: 0;
+  }
+
+  .circuit-container.active .led-element {
+    fill: var(--accent);
+  }
+
+  .circuit-container.active .led-glow {
+    opacity: 0.35;
+  }
+
+  /* Circuit Button */
+  .circuit-message {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fg);
+    background: transparent;
+    border: 1px solid var(--muted);
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    width: 100%;
+  }
+
+  .circuit-btn {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+  width: 15px;
+  height: 15px;
+  border-radius: 25%;
+  background: #111;
+  border: 1.5px solid #555;
+  cursor: pointer;
+  color: var(--fg);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.25rem;
+  letter-spacing: 0.05em;
+  transition: border-color 0.15s;
+  z-index: 10;
+}
+.circuit-btn:hover { border-color: var(--accent); color: var(--accent); }
+.circuit-btn:active { background: var(--accent); color: var(--bg); }
+
+  .circuit-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .circuit-btn:active {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  /* ── CENTER NAV ── */
+  .nav-center {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .site-title {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    letter-spacing: 0.3em;
+    color: white;
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+  }
+
+  .site-subtitle {
+    font-family: 'Space Mono', monospace;
+    font-size: 20;
+    letter-spacing: 0.2em;
+    color: white;
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+  }
+
+  .site-subsubtitle {
+    font-family: 'Space Mono', monospace;
+    font-size: 20;
+    letter-spacing: 0.2em;
+    color: gray;
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+  }
+
+
+
+  .nav-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    pointer-events: all;
+    border: var(--border);
+  }
+
+  .nav-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(0.75rem, 1.2vw, 0.9rem);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--fg);
+    background: transparent;
+    border: none;
+    border-bottom: var(--border);
+    padding: 1.1rem 3.5rem;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.15s, background 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .nav-btn:last-child { border-bottom: none; }
+
+  .nav-btn::before {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    transition: background 0.15s;
+    flex-shrink: 0;
+  }
+
+  .nav-btn:hover {
+    background: var(--fg);
+    color: var(--bg);
+  }
+
+  .nav-btn:hover::before {
+    background: var(--accent);
+  }
+
+  /* ── HOVER PREVIEW IMAGES ── */
+  .preview-img {
+    position: fixed;
+    width: 220px;
+    height: 140px;
+    object-fit: cover;
+    border: 2px solid var(--accent);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 20;
+    transition: opacity 0.2s;
+    background: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .preview-img.visible { opacity: 1; }
+
+  /* positions */
+  .preview-top    { top: 2rem; left: 50%; transform: translateX(-50%); }
+  .preview-left   { left: 2rem; top: 50%; transform: translateY(-50%); }
+  .preview-right  { right: 2rem; top: 50%; transform: translateY(-50%); }
+  .preview-bottom { bottom: 2rem; left: 50%; transform: translateX(-50%); }
+
+  .preview-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+    padding: 0.4rem 0.7rem;
+    border: 1px solid var(--accent);
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+  }
+
+  /* corner labels */
+ 
+</style>
+</head>
+<body>
+
+<!-- canvases (back to front) -->
+<canvas id="canvas-click"></canvas>
+<canvas id="canvas-physics"></canvas>
+<canvas id="canvas-quant"></canvas>
+<canvas id="canvas-led"></canvas>
+
+<div class="circuit-container" id="led-circuit-module">
+  <div class="circuit-header" id="circuit-header"></div>
+  <svg class="circuit-svg" width="200" height="150" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+
+    <path d="M 40 25 L 100 25 L 100 45" fill="none" stroke="#FFFF" stroke-width="2"/>
+    <path d="M 100 75 L 100 95" fill="none" stroke="#FFFF" stroke-width="2"/>
+    <path d="M 100 115 L 100 135 " fill="none" stroke="#FFFF" stroke-width="2" color/>
+
+    <text x="35" y="24" fill="#FFFF" font-family="Space Mono, monospace" font-size="14">|</text>
+    <text x="120" y="140" fill="#666" font-family="Space Mono, monospace" font-size="9">GND</text>
+    <text x="142" y="62" fill="#888" font-family="Space Mono, monospace" font-size="8">220 Ω</text>
+    <text x="135" y="110" fill="#888" font-family="Space Mono, monospace" font-size="8">LED</text>
+
+    <circle cx="100" cy="25" r="2" fill="#555" />
+    <circle cx="100" cy="135" r="2" fill="#555" />
+
+    <g transform="translate(100, 45)">
+      <path d="M 0 0 L 0 5 L -6 8 L 6 12 L -6 16 L 6 20 L -6 24 L 0 27 L 0 30" fill="none" stroke="#e8e4dc" stroke-width="2" stroke-linejoin="miter"/>
+    </g>
+    
+    <g transform="translate(100, 105)">
+      <path d="M -10 -10 L 10 -10 L 0 10 Z" fill="#222" stroke="#e8e4dc" stroke-width="1.5"/>
+      <line x1="-10" y1="10" x2="10" y2="10" stroke="#e8e4dc" stroke-width="2"/>
+      
+      <polygon class="led-glow" points="-10 -10,10 0,10 0,10" fill="rgba(200,245,66,1)"  pointer-events="none"/>
+      
+      <polygon class="led-glow" points="0,-20 18,14 -18,14" fill="rgba(200,245,66,1)" filter="url(#glow-blur)" pointer-events="none"/>
+      
+      <path d="M -14 2 L -22 -6 M -18 -6 L -22 -6 L -22 -2" fill="none" stroke="#666" stroke-width="1"/>
+    
+    </g>
+    <g transform="translate(100, 130)">
+      <line x1="0" y1="0" x2="0" y2="6" stroke="#e8e4dc" stroke-width="2"/>
+      <line x1="-8" y1="6"  x2="8"  y2="6"  stroke="#e8e4dc" stroke-width="2.5"/>
+      <line x1="-5" y1="10" x2="5"  y2="10" stroke="#e8e4dc" stroke-width="1.8"/>
+      <line x1="-2" y1="14" x2="2"  y2="14" stroke="#e8e4dc" stroke-width="1.2"/>
+    </g>
+    <g transform="translate(40, 10)">
+      <line x1="0" y1="0" x2="0" y2="1" stroke="#e8e4dc" stroke-width="2"/>
+      <line x1="-8" y1="0" x2="8" y2="0" stroke="#e8e4dc" stroke-width="2.5"/>
+      <text x="10" y="4" fill="#c8f542" font-family="Space Mono, monospace" font-size="8" font-weight="700">+5V</text>
+    </g>
+    <defs>
+      <filter id="glow-blur" x="-50%" y="-50%" width="250%" height="250%">
+        <feGaussianBlur stdDeviation="6"/>
+      </filter>
+    </defs>
+  </svg>
+  <button class="circuit-btn" id="circuit-switch">PWR</button>
+</div>
+
+<!-- preview panels -->
+<div class="preview-img preview-top"   id="prev-about">
+  <svg width="220" height="140" viewBox="0 0 220 140" xmlns="http://www.w3.org/2000/svg">
+    <rect width="220" height="140" fill="#111"/>
+  </svg>
+  <span class="preview-label">about</span>
+</div>
+
+<div class="preview-img preview-left"  id="prev-software">
+  
+  <svg width="220" height="140" viewBox="0 0 220 140" xmlns="http://www.w3.org/2000/svg">
+    
+    <rect width="220" height="140" fill="#111"/>
+    <text x="30" y="55" font-family="monospace" font-size="11" fill="#c8f542">function() {</text>
+    <text x="42" y="75" font-family="monospace" font-size="11" fill="#888">return true;</text>
+    <text x="30" y="95" font-family="monospace" font-size="11" fill="#c8f542">}</text>
+    <rect x="18" y="38" width="184" height="72" fill="none" stroke="#2a2a2a" stroke-width="1.5"/>
+  </svg>
+  <span class="preview-label">software</span>
+</div>
+<div class="preview-img preview-right" id="prev-hardware">
+  <svg width="220" height="140" viewBox="0 0 220 140" xmlns="http://www.w3.org/2000/svg">
+    <rect width="220" height="140" fill="#111" rx="4"/>
+    
+    <path d="M 30 70 L 60 70 M 160 70 L 190 70" fill="none" stroke="#c8f542" stroke-width="2"/>
+    
+    <path d="M 60 70 
+             L 75 70 
+             L 80 60 L 88 80 L 96 60 L 104 80 L 112 60 L 120 80 L 125 70 
+             L 160 70" 
+          fill="none" stroke="#c8f542" stroke-width="2" stroke-linejoin="miter" stroke-linecap="square"/>
+          
+
+    <path d="M 145 70 L 145 95 L 100 95" fill="none" stroke="#c8f542" stroke-width="1.5" stroke-dasharray="none"/>
+    <g stroke="#c8f542" stroke-width="2">
+      <line x1="100" y1="88" x2="100" y2="102" />
+      <line x1="95" y1="88" x2="95" y2="102" />
+    </g>
+    <path d="M 95 95 L 38 95 L 38 70" fill="none" stroke="#c8f542" stroke-width="1.5"/>
+
+    <text x="100" y="50" fill="#e8e4dc" font-family="Space Mono, monospace" font-size="9" font-weight="700" text-anchor="middle">R1: 10kΩ</text>
+    <text x="32" y="52" fill="#666" font-family="Space Mono, monospace" font-size="8" font-weight="700">5V</text>
+    <text x="135" y="112" fill="#666" font-family="Space Mono, monospace" font-size="8" font-weight="700">C1: 10uF</text>
+
+    <circle cx="145" cy="70" r="2.5" fill="#c8f542"/>
+    <circle cx="38" cy="70" r="2.5" fill="#c8f542"/>
+  </svg>
+  <span class="preview-label">hardware</span>
+</div>
+
+<div class="preview-img preview-bottom" id="prev-contact">
+  <svg width="220" height="140" viewBox="0 0 220 140" xmlns="http://www.w3.org/2000/svg">
+    <rect width="220" height="140" fill="#111"/>
+    <rect x="40" y="45" width="140" height="80" rx="2" fill="none" stroke="#c8f542" stroke-width="2"/>
+    <polyline points="40,45 110,95 180,45" fill="none" stroke="#c8f542" stroke-width="2"/>
+  </svg>
+  <span class="preview-label">contact</span>
+</div>
+
+<!-- nav -->
+<div class="nav-center">
+  <div class="site-title">Nolan Coords</div>
+  <div class="site-subtitle">Electrical Engineering, Web Development, Quantitative Research, Physics Modeling</div>
+  <div class="site-subsubtitle">Raleigh NC |<a href="https://www.linkedin.com/in/nolan-coords">linkedin</a> |  <a href="https://github.com/nolancoords">github</a></div>
+  <div class="nav-buttons">
+    <a href="about.html"    class="nav-btn" id="btn-about"    data-preview="prev-about">about me</a>
+    <a href="software.html" class="nav-btn" id="btn-software" data-preview="prev-software">software</a>
+    <a href="hardware.html" class="nav-btn" id="btn-hardware" data-preview="prev-hardware">hardware</a>
+    <a href="contact.html"  class="nav-btn" id="btn-contact"  data-preview="prev-contact">contact</a>
+  </div>
+</div>
+
+<script>
+// ── UTIL ──────────────────────────────────────────────────
+function resize(canvas) {
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+
+(function() {
+  const canvas = document.getElementById('canvas-click');
+  const ctx = canvas.getContext('2d');
+  canvas.addEventListener('click', e => {
+    const qx = window.innerWidth  ;
+    const qy = window.innerHeight ;
+    
+
+    for (let i = 0; i < 5; i++) {
+      bubbles.push({
+        x: e.clientX + (Math.random() - 0.5) * 30,
+        y: e.clientY + (Math.random() - 0.5) * 30,
+        r: 8 + Math.random() * 20,
+        vx: (Math.random() - 0.5) * 2,
+        vy: -1 - Math.random() * 2,
+        alpha: 0.9,
+        hue: 70 + Math.random() * 40,
+      });
+    }
+  });
+  resize(canvas);
+  
+
+  const bubbles = [];
+
+  
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = bubbles.length - 1; i >= 0; i--) {
+      const b = bubbles[i];
+      b.x += b.vx; b.y += b.vy;
+      b.vy += 0.03;
+      b.alpha -= 0.012;
+      if (b.alpha <= 0) { bubbles.splice(i, 1); continue; }
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+      ctx.strokeStyle = `hsla(${b.hue}, 90%, 60%, ${b.alpha})`;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+(function() {
+  const canvas = document.getElementById('canvas-physics');
+  const ctx = canvas.getContext('2d');
+
+  canvas.addEventListener('click', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+
+  fragments.forEach(frag => {
+    const dx = mx - frag.x;
+    const dy = my - frag.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+
+    // simple hit detection
+    if (dist < frag.r) {
+      // rotate velocity 90° clockwise: (vx, vy) -> (vy, -vx)
+    const newVx = -frag.vy;
+    const newVy = frag.vx;
+
+      frag.vx = newVx;
+      frag.vy = newVy;
+    }
+  });
+});
+
+  resize(canvas);
+  window.addEventListener('resize', () => resize(canvas));
+
+  // --- Animation States ---
+  // 0: Approaching, 1: Splitting / Resetting
+  let animationState = 0; 
+  let frameCounter = 0;
+
+  // --- Main Balls Setup ---
+  const cy = 100;
+  const r = 28;
+  
+  // Start them further apart (e.g., left side and center-right)
+  let x1 = 30; 
+  let x2 = 170; 
+  const speed = 2.5; // Constant approach speed
+
+  // --- Fragment Setup (for after the split) ---
+  let fragments = [];
+
+  function initFragments(startX, startY) {
+    fragments = [
+      { x: startX, y: startY, vx: 1.5, vy: -1.2, r: r * 0.6 },  // Top-right shard
+      { x: startX, y: startY, vx: 2.0, vy: 1.2,  r: r * 0.6 }   // Bottom-right shard
+    ];
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // ── STATE 0: APPROACH & COLLISION DETECTION ────────────────
+    if (animationState === 0) {
+      // Move ball 1 toward ball 2
+      x1 += speed;
+
+      // Check if the lines/boundaries intersect: distance between centers <= sum of radii
+      if ((x2 - x1) <= (r * 2)) {
+        // Correct position to exact impact point
+        x1 = x2 - (r * 2); 
+        animationState = 1;
+        frameCounter = 0;
+        initFragments(x2, cy); // Spawn fragments at Ball 2's position
+      }
+
+      // Draw Ball 1 (Striker)
+      ctx.beginPath();
+      ctx.arc(x1, cy, r, 0, Math.PI * 2);
+      ctx.strokeStyle = '#e8e4dc';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Velocity Arrow for Ball 1
+      ctx.beginPath();
+      ctx.moveTo(x1, cy);
+      ctx.lineTo(x1 + 15, cy);
+      ctx.strokeStyle = 'rgba(200,245,66,0.6)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Draw Ball 2 (Target)
+      ctx.beginPath();
+      ctx.arc(x2, cy, r, 0, Math.PI * 2);
+      ctx.strokeStyle = '#e8e4dc';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+    // ── STATE 1: BREAK OFF / SHATTER ───────────────────────────
+    } else if (animationState === 1) {
+      frameCounter++;
+
+      // Draw Ball 1 (Stops or slows down significantly upon impact)
+      ctx.beginPath();
+      ctx.arc(x1, cy, r, 0, Math.PI * 2);
+      ctx.strokeStyle = '#e8e4dc';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Draw and update the two smaller fragments
+      fragments.forEach(frag => {
+        frag.x += frag.vx;
+        frag.y += frag.vy;
+
+        ctx.beginPath();
+        ctx.arc(frag.x, frag.y, frag.r, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(232, 228, 220, 0.8)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        
+        // Dynamic green energy trailing line for fragments
+        ctx.beginPath();
+        ctx.moveTo(frag.x, frag.y);
+        ctx.lineTo(frag.x - (frag.vx * 3), frag.y - (frag.vy * 3));
+        ctx.strokeStyle = 'rgba(200,245,66,0.4)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      });
+
+      // Brief flash effect at point of impact
+      if (frameCounter < 6) {
+        ctx.beginPath();
+        ctx.arc(x1 + r, cy, r * 1.2, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(200,245,66,0.08)';
+        ctx.fill();
+      }
+
+      // Reset the loop after 100 frames of explosion
+      if (frameCounter > 100) {
+        // rewind the ball position backwards
+        x1 -= speed; 
+        if (frameCounter > 400) { 
+            animationState = 0; }
+      }
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  
+  draw();
+
+
+})();
+// ── 3. QUANT CIRCLES (bottom-left) ───────────────────────
+(function() {
+  const canvas = document.getElementById('canvas-quant');
+  const ctx = canvas.getContext('2d');
+  resize(canvas);
+  window.addEventListener('resize', () => resize(canvas));
+
+  const tickers = [
+    { sym: 'APPL', price: 142, color: '#e8e4dc' },
+    { sym: 'TSLA', price: 87,  color: '#e8e4dc' },
+    { sym: 'GOOGL', price: 310, color: '#e8e4dc' },
+  ];
+
+  // FIX 1: Reduced history from 30 to 12. Fewer points mean wider, more visible waves!
+  const histories = tickers.map((tk) => Array.from({length: 12}, () => tk.price / 400));
+  let t = 0;
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const bx = 40, by = canvas.height - 180;
+    t++;
+
+    tickers.forEach((tk, i) => {
+      // Slow, organic drift
+      tk.price += (Math.random() - .5) * 100;
+      tk.price = Math.max(10, Math.min(390, tk.price));
+
+      const hist = histories[i];
+      hist.push(tk.price / 400);
+      if (hist.length > 12) hist.shift(); // Keep it matching the new length
+
+      const cx = bx + i * 90 + 30;
+      const cy = by + 30;
+      const r = 26;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.clip();
+
+      // FIX 2: Cubic Bezier Curve implementation for distinct "wavy" flowing look
+      if (hist.length > 1) {
+        ctx.beginPath();
+        
+        // Map data index to X coordinate inside the circle
+        const getX = (index) => cx - r + (index / (hist.length - 1)) * r * 10;
+        // Map data value to Y coordinate inside the circle
+        const getY = (val) => cy + r - val * r * 1.8;
+
+        ctx.moveTo(getX(0), getY(hist[0]));
+
+        for (let j = 0; j < hist.length - 1; j++) {
+          const x0 = getX(j);
+          const y0 = getY(hist[j]);
+          const x1 = getX(j + 1);
+          const y1 = getY(hist[j + 1]);
+
+          // Calculate control points horizontally offset to force a smooth "S" wave between points
+          const cpX1 = x0 + (x1 - x0) / 2;
+          const cpY1 = y0;
+          const cpX2 = x0 + (x1 - x0) / 2;
+          const cpY2 = y1;
+
+          ctx.bezierCurveTo(cpX1, cpY1, cpX2, cpY2, x1, y1);
+        }
+
+        const last = hist[hist.length - 1];
+        const prev = hist[hist.length - 2];
+        const up = last >= prev;
+        
+        ctx.strokeStyle = up ? '#c8f542' : '#f54242';
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // Circle border
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.strokeStyle = '#2a2a2a';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Labels
+      ctx.font = '700 9px Space Mono, monospace';
+      ctx.fillStyle = '#666';
+      ctx.textAlign = 'center';
+      ctx.fillText(tk.sym, cx, cy + r + 14);
+
+      const up = hist[hist.length - 1] >= hist[hist.length - 2];
+      ctx.font = '500 8px DM Sans, sans-serif';
+      ctx.fillStyle = up ? '#c8f542' : '#f54242';
+      ctx.fillText(tk.price.toFixed(0), cx, cy + r + 24);
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  canvas.addEventListener('click', (event) => {
+  
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = event.clientX - rect.left;
+  const mouseY = event.clientY - rect.top;
+
+  
+  const bx = 40;
+  const by = canvas.height - 180;
+  const r = 26; // radius of the circle
+
+  
+  ticker.forEach((tk, i) => {
+    const cx = bx + i * 90 + 30;
+    const cy = by + 30;
+
+  
+    const distance = Math.sqrt((mouseX - cx) ** 2 + (mouseY - cy) ** 2);
+
+    // If distance is less than the radius, it's a hit!
+    if (distance <= r) {
+      console.log(`Clicked on ticker: ${tk.sym}`, tk);
+      
+      // Put your click action here (e.g., open a modal, change a chart)
+      alert(`You selected ${tk.sym} at $${tk.price.toFixed(0)}`);
+    }
+  });
+});
+
+  draw();
+})();
+
+// ── 4. LED ARRAY (top-right) ─────────────────────────────
+(function() {
+  const module = document.getElementById('led-circuit-module');
+  const btn = document.getElementById('circuit-switch');
+
+  // Activate on press down
+  const turnOn = () => module.classList.add('active');
+  // Deactivate on lift
+  const turnOff = () => module.classList.remove('active');
+
+  // Desktop events
+  btn.addEventListener('mousedown', turnOn);
+  btn.addEventListener('mouseup', turnOff);
+  btn.addEventListener('mouseleave', turnOff);
+
+  // Mobile / Touch handling
+  btn.addEventListener('touchstart', (e) => { e.preventDefault(); turnOn(); });
+  btn.addEventListener('touchend', turnOff);
+})();
+
+// ── HOVER PREVIEWS ─────────────────────────────────────────
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  const id = btn.dataset.preview;
+  const panel = document.getElementById(id);
+  if (!panel) return;
+  btn.addEventListener('mouseenter', () => panel.classList.add('visible'));
+  btn.addEventListener('mouseleave', () => panel.classList.remove('visible'));
+});
+
+const win = document.getElementById("led-circuit-module");
+const header = document.querySelector(".circuit-header");
+
+let isDragging = false;
+let offsetX = 0;
+let offsetY = 0;
+
+header.addEventListener("mousedown", (e) => {
+  isDragging = true;
+
+  win.style.left = `${win.offsetLeft}px`;
+  win.style.top = `${win.offsetTop}px`;
+  win.style.right = "auto";
+  win.style.bottom = "auto";
+
+  offsetX = e.clientX - win.offsetLeft;
+  offsetY = e.clientY - win.offsetTop;
+
+  document.addEventListener("mousemove", mouseMoveHandler);
+  document.addEventListener("mouseup", mouseUpHandler);
+});
+
+function mouseMoveHandler(e) {
+  if (!isDragging) return;
+
+  win.style.left = `${e.clientX - offsetX}px`;
+  win.style.top = `${e.clientY - offsetY}px`;
+}
+
+function mouseUpHandler() {
+  isDragging = false;
+
+  document.removeEventListener("mousemove", mouseMoveHandler);
+  document.removeEventListener("mouseup", mouseUpHandler);
+}
+
+
+
+
+</script>
+</body>
+</html>
