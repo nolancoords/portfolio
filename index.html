@@ -47,14 +47,15 @@
     right: .5rem;
     z-index: 5;
     background: rgba(10, 10, 10, 0.8);
+    background-color: black;
     border: 1px solid var(--muted);
     padding: 1rem;
-    border-radius: 4px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
     pointer-events: all;
+
   }
 
   .circuit-header {
@@ -68,6 +69,7 @@
       border-top-left-radius: 2px;
       border-top-right-radius: 2px;
       user-select: none;
+
   }
 
   .circuit-svg {
@@ -96,20 +98,6 @@
     opacity: 0.35;
   }
 
-  /* Circuit Button */
-  .circuit-message {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--fg);
-    background: transparent;
-    border: 1px solid var(--muted);
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    transition: all 0.15s;
-    width: 100%;
-  }
 
   .circuit-btn {
   position: absolute;
@@ -208,7 +196,7 @@
     text-transform: uppercase;
     text-decoration: none;
     color: var(--fg);
-    background: transparent;
+    background: black;
     border: none;
     border-bottom: var(--border);
     padding: 1.1rem 3.5rem;
@@ -218,6 +206,7 @@
     display: flex;
     align-items: center;
     gap: 1rem;
+
   }
 
   .nav-btn:last-child { border-bottom: none; }
@@ -623,137 +612,7 @@ function resize(canvas) {
 
 
 })();
-// ── 3. QUANT CIRCLES (bottom-left) ───────────────────────
-(function() {
-  const canvas = document.getElementById('canvas-quant');
-  const ctx = canvas.getContext('2d');
-  resize(canvas);
-  window.addEventListener('resize', () => resize(canvas));
 
-  const tickers = [
-    { sym: 'APPL', price: 142, color: '#e8e4dc' },
-    { sym: 'TSLA', price: 87,  color: '#e8e4dc' },
-    { sym: 'GOOGL', price: 310, color: '#e8e4dc' },
-  ];
-
-  // FIX 1: Reduced history from 30 to 12. Fewer points mean wider, more visible waves!
-  const histories = tickers.map((tk) => Array.from({length: 12}, () => tk.price / 400));
-  let t = 0;
-
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const bx = 40, by = canvas.height - 180;
-    t++;
-
-    tickers.forEach((tk, i) => {
-      // Slow, organic drift
-      tk.price += (Math.random() - .5) * 100;
-      tk.price = Math.max(10, Math.min(390, tk.price));
-
-      const hist = histories[i];
-      hist.push(tk.price / 400);
-      if (hist.length > 12) hist.shift(); // Keep it matching the new length
-
-      const cx = bx + i * 90 + 30;
-      const cy = by + 30;
-      const r = 26;
-
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI * 2);
-      ctx.clip();
-
-      // FIX 2: Cubic Bezier Curve implementation for distinct "wavy" flowing look
-      if (hist.length > 1) {
-        ctx.beginPath();
-        
-        // Map data index to X coordinate inside the circle
-        const getX = (index) => cx - r + (index / (hist.length - 1)) * r * 10;
-        // Map data value to Y coordinate inside the circle
-        const getY = (val) => cy + r - val * r * 1.8;
-
-        ctx.moveTo(getX(0), getY(hist[0]));
-
-        for (let j = 0; j < hist.length - 1; j++) {
-          const x0 = getX(j);
-          const y0 = getY(hist[j]);
-          const x1 = getX(j + 1);
-          const y1 = getY(hist[j + 1]);
-
-          // Calculate control points horizontally offset to force a smooth "S" wave between points
-          const cpX1 = x0 + (x1 - x0) / 2;
-          const cpY1 = y0;
-          const cpX2 = x0 + (x1 - x0) / 2;
-          const cpY2 = y1;
-
-          ctx.bezierCurveTo(cpX1, cpY1, cpX2, cpY2, x1, y1);
-        }
-
-        const last = hist[hist.length - 1];
-        const prev = hist[hist.length - 2];
-        const up = last >= prev;
-        
-        ctx.strokeStyle = up ? '#c8f542' : '#f54242';
-        ctx.lineWidth = 2;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        ctx.stroke();
-      }
-      ctx.restore();
-
-      // Circle border
-      ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI * 2);
-      ctx.strokeStyle = '#2a2a2a';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      // Labels
-      ctx.font = '700 9px Space Mono, monospace';
-      ctx.fillStyle = '#666';
-      ctx.textAlign = 'center';
-      ctx.fillText(tk.sym, cx, cy + r + 14);
-
-      const up = hist[hist.length - 1] >= hist[hist.length - 2];
-      ctx.font = '500 8px DM Sans, sans-serif';
-      ctx.fillStyle = up ? '#c8f542' : '#f54242';
-      ctx.fillText(tk.price.toFixed(0), cx, cy + r + 24);
-    });
-
-    requestAnimationFrame(draw);
-  }
-
-  canvas.addEventListener('click', (event) => {
-  
-  const rect = canvas.getBoundingClientRect();
-  const mouseX = event.clientX - rect.left;
-  const mouseY = event.clientY - rect.top;
-
-  
-  const bx = 40;
-  const by = canvas.height - 180;
-  const r = 26; // radius of the circle
-
-  
-  ticker.forEach((tk, i) => {
-    const cx = bx + i * 90 + 30;
-    const cy = by + 30;
-
-  
-    const distance = Math.sqrt((mouseX - cx) ** 2 + (mouseY - cy) ** 2);
-
-    // If distance is less than the radius, it's a hit!
-    if (distance <= r) {
-      console.log(`Clicked on ticker: ${tk.sym}`, tk);
-      
-      // Put your click action here (e.g., open a modal, change a chart)
-      alert(`You selected ${tk.sym} at $${tk.price.toFixed(0)}`);
-    }
-  });
-});
-
-  draw();
-})();
 
 // ── 4. LED ARRAY (top-right) ─────────────────────────────
 (function() {
