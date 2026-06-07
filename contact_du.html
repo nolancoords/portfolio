@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kontakt | Portfolio</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #000000;
+    --card: #4e5259;
+    --text: #e6e6e6;
+    --muted: #9aa4b2;
+    --accent: #ffffff;
+  }
+
+  * { box-sizing: border-box; }
+
+  /* ── LANGUAGE SWITCHER ── */
+  .lang-switcher {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 9999;
+    font-family: "Space Mono", monospace;
+  }
+  .lang-switcher select {
+    background: #0d0d0d;
+    color: var(--text);
+    border: 1px solid #444;
+    font-family: "Space Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    padding: 6px 24px 6px 10px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+  }
+  .lang-switcher select:hover { border-color: var(--text); }
+
+  body {
+    margin: 0;
+    font-family: "DM Sans", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 4rem 1.5rem 2rem;
+  }
+
+  .container { width: min(900px, 100%); }
+
+  h1 {
+    font-family: "Space Mono", monospace;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  p { color: var(--muted); margin-bottom: 2rem; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .card {
+    background: black;
+    border: 1px solid white;
+    padding: 2rem;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    text-decoration: none;
+    color: var(--text);
+    cursor: pointer;
+    display: block;
+    position: relative;
+  }
+
+  .card:hover { transform: translateY(-3px); }
+
+  .label { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.4rem; }
+  .value { font-size: 1rem; word-break: break-word; }
+
+  .copy-hint { font-size: 0.7rem; color: #444; margin-top: 0.5rem; transition: color 0.2s; }
+  .card:hover .copy-hint { color: var(--muted); }
+
+  .copied-flash {
+    position: absolute; top: 0.5rem; right: 0.75rem;
+    font-size: 0.75rem; color: var(--accent); opacity: 0;
+    transition: opacity 0.2s; font-family: "Space Mono", monospace;
+  }
+  .copied-flash.show { opacity: 1; }
+
+  .footer-note { margin-top: 2rem; font-size: 0.9rem; color: var(--muted); }
+  .highlight { color: var(--accent); }
+
+  /* Pendulum */
+  .pendulum-section { width: min(900px, 100%); margin-top: 3rem; }
+
+  .pendulum-box {
+    background: #000;
+    border: 1px solid white;
+    position: relative;
+    height: 320px;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  .slidecontainer { width: 100%; }
+
+  .slider {
+    width: 40%; height: 6px; border-radius: 999px;
+    background: #222; outline: none; appearance: none; cursor: pointer;
+  }
+
+  .slider::-webkit-slider-thumb {
+    background: white; -webkit-appearance: none; width: 18px; height: 18px;
+    border-radius: 50%; border: 2px solid #000; margin-top: -4px; transition: transform 0.1s ease;
+  }
+  .slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+  .slider::-moz-range-track { height: 6px; background: #222; border-radius: 999px; }
+  .slider::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: white; border: none; }
+
+  .vel-display {
+    position: absolute; top: 10px; right: 14px;
+    font-family: "Space Mono", monospace; font-size: 0.75rem;
+    color: white; pointer-events: none;
+  }
+
+  .drag-hint {
+    position: absolute; bottom: 10px; left: 14px;
+    font-size: 0.7rem; color: #333;
+    font-family: "Space Mono", monospace; pointer-events: none;
+  }
+</style>
+</head>
+
+<body>
+
+<!-- LANGUAGE SWITCHER -->
+<div class="lang-switcher">
+  <select onchange="if(this.value) window.location.href=this.value">
+    <option value="contact.html">EN — English</option>
+    <option value="contact_du.html" selected>DE — Deutsch</option>
+  </select>
+</div>
+
+<div class="container">
+
+  <h1>Kontakt</h1>
+  <p>
+    Offen für Zusammenarbeit, freiberufliche Projekte und <span class="highlight">Praktikumsangebote</span>.
+  </p>
+
+  <div class="grid">
+
+    <div class="card" id="email-card" onclick="copyToClipboard('nolancoords@gmail.com', 'email-flash')">
+      <div class="label">E-Mail</div>
+      <div class="value">nolancoords@gmail.com</div>
+      <div class="copy-hint">zum Kopieren klicken</div>
+      <span class="copied-flash" id="email-flash">kopiert!</span>
+    </div>
+
+    <a class="card" href="https://github.com/nolancoords" target="_blank">
+      <div class="label">GitHub</div>
+      <div class="value">github.com/nolancoords</div>
+    </a>
+
+    <a class="card" href="https://www.linkedin.com/in/nolan-coords/" target="_blank">
+      <div class="label">LinkedIn</div>
+      <div class="value">www.linkedin.com/in/nolan-coords</div>
+    </a>
+
+    <div class="card" id="phone-card" onclick="copyToClipboard('+13365282174', 'phone-flash')">
+      <div class="label">Telefon</div>
+      <div class="value">+1 (336) 528-2174</div>
+      <div class="copy-hint">zum Kopieren klicken</div>
+      <span class="copied-flash" id="phone-flash">kopiert!</span>
+    </div>
+
+  </div>
+
+  <div class="footer-note">
+    Derzeit <span class="highlight">verfügbar für Praktikumsgespräche</span> und offen für interessante Projekte.
+  </div>
+
+</div>
+
+<div class="pendulum-section">
+  <div class="card">einfache Simulation harmonischer Schwingung</div>
+
+  <div class="pendulum-box" id="pendulum-box">
+    <div class="vel-display" id="vel-display">Geschw.: 0,00 rad/s</div>
+    <canvas id="pendulum-canvas"></canvas>
+    <div class="drag-hint">Massenpunkt ziehen</div>
+  </div>
+
+  <div class="slidecontainer">
+    <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+    <p>Masse: <span id="demo"></span></p>
+  </div>
+</div>
+
+<script>
+  var slider = document.getElementById("myRange");
+  var output = document.getElementById("demo");
+  output.innerHTML = slider.value;
+
+  slider.oninput = function() { output.innerHTML = this.value; }
+  slider.addEventListener("input", function () {
+    document.documentElement.style.setProperty("--slider-val", this.value);
+  });
+
+  function copyToClipboard(text, flashId) {
+    navigator.clipboard.writeText(text).then(() => {
+      const flash = document.getElementById(flashId);
+      flash.classList.add('show');
+      setTimeout(() => flash.classList.remove('show'), 1500);
+    });
+  }
+
+  const box = document.getElementById('pendulum-box');
+  const canvas = document.getElementById('pendulum-canvas');
+  const ctx = canvas.getContext('2d');
+  const velDisplay = document.getElementById('vel-display');
+
+  let W, H, pivotX, pivotY, L;
+
+  function resize() {
+    W = box.clientWidth;
+    H = box.clientHeight;
+    canvas.width = W;
+    canvas.height = H;
+    pivotX = W / 2;
+    pivotY = H * 0.08;
+    L = H * 0.6;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function getMass() { return Number(slider.value); }
+  const g = 9.81;
+  let angle = Math.PI / 6;
+  let omega = 0;
+  let dragging = false;
+  let lastTime = null;
+
+  function bobPos() {
+    return { x: pivotX + L * Math.sin(angle), y: pivotY + L * Math.cos(angle) };
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    const bob = bobPos();
+    ctx.strokeStyle = '#333'; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(pivotX, pivotY); ctx.lineTo(pivotX, pivotY + L); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.strokeStyle = '#e6e6e6'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(pivotX, pivotY); ctx.lineTo(bob.x, bob.y); ctx.stroke();
+    ctx.fillStyle = '#000'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.arc(pivotX, pivotY, 5, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = dragging ? '#fff' : '#e6e6e6'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.arc(bob.x, bob.y, 16 * (slider.value / 30), 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+  }
+
+  function step(ts) {
+    if (!lastTime) lastTime = ts;
+    const dt = Math.min((ts - lastTime) * 4 / 1000, 0.05);
+    lastTime = ts;
+    if (!dragging) {
+      const alpha = -(g / L) * Math.sin(angle);
+      omega += alpha * dt;
+      omega *= Math.exp(-0.5 * dt * (1 / getMass()));
+      angle += omega * dt;
+    }
+    velDisplay.textContent = `Geschw.: ${Math.abs(omega).toFixed(2)} rad/s`;
+    draw();
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+
+  function getAngleFromPointer(clientX, clientY) {
+    const rect = canvas.getBoundingClientRect();
+    return Math.atan2(clientX - rect.left - pivotX, clientY - rect.top - pivotY);
+  }
+
+  function hitBob(clientX, clientY) {
+    const rect = canvas.getBoundingClientRect();
+    const mx = clientX - rect.left, my = clientY - rect.top;
+    const bob = bobPos();
+    const dx = mx - bob.x, dy = my - bob.y;
+    return Math.sqrt(dx * dx + dy * dy) < 28;
+  }
+
+  canvas.addEventListener('mousedown', e => { if (hitBob(e.clientX, e.clientY)) { dragging = true; omega = 0; } });
+  window.addEventListener('mousemove', e => { if (!dragging) return; angle = getAngleFromPointer(e.clientX, e.clientY); angle = Math.max(-Math.PI * 0.9, Math.min(Math.PI * 0.9, angle)); });
+  window.addEventListener('mouseup', () => { dragging = false; });
+  canvas.addEventListener('touchstart', e => { const t = e.touches[0]; if (hitBob(t.clientX, t.clientY)) { dragging = true; omega = 0; e.preventDefault(); } }, { passive: false });
+  window.addEventListener('touchmove', e => { if (!dragging) return; const t = e.touches[0]; angle = getAngleFromPointer(t.clientX, t.clientY); angle = Math.max(-Math.PI * 0.9, Math.min(Math.PI * 0.9, angle)); e.preventDefault(); }, { passive: false });
+  window.addEventListener('touchend', () => { dragging = false; });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Software | Nolan Coords</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050505;
+    --fg: #e8e4dc;
+    --accent: #c8f542;
+    --muted: #2a2a2a;
+    --border: 1px solid #222;
+    --glow: rgba(200, 245, 66, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  .element-class { scrollbar-width: none; -ms-overflow-style: none; }
+  .element-class::-webkit-scrollbar { display: none; }
+
+  /* ── LANGUAGE SWITCHER ── */
+  .lang-switcher {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 9999;
+    font-family: 'Space Mono', monospace;
+  }
+  .lang-switcher select {
+    background: #0d0d0d;
+    color: var(--fg);
+    border: 1px solid #444;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    padding: 6px 24px 6px 10px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+  }
+  .lang-switcher select:hover { border-color: var(--fg); }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .corner-decor {
+    position: fixed;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: #444;
+    z-index: 5;
+    pointer-events: none;
+    letter-spacing: 0.1em;
+  }
+  .top-left  { top: 20px; left: 20px; text-align: left; }
+  .top-right { top: 10px; right: 10px; text-align: left; color: white; opacity: 0.2; }
+  .bottom-left  { bottom: 20px; left: 20px; font-size: 0.6rem; line-height: 1.4; color: #333; }
+  .bottom-right { bottom: 20px; right: 20px; text-align: right; }
+
+  .page { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; z-index: 10; }
+  .page.active { display: flex; }
+  .page.fade-in { animation: fadeIn 0.3s ease forwards; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .nav-center { display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: all; }
+
+  .site-title { font-family: 'Space Mono', monospace; font-size: clamp(1.2rem, 2.5vw, 1.8rem); font-weight: 700; letter-spacing: 0.4em; color: white; text-transform: uppercase; margin-bottom: 0.5rem; text-shadow: 0 0 10px rgba(255,255,255,0.1); }
+  .site-subtitle { font-family: 'Space Mono', monospace; font-size: clamp(0.65rem, 1.2vw, 0.8rem); letter-spacing: 0.25em; color: white; text-transform: uppercase; margin-bottom: 3rem; }
+
+  .nav-buttons { display: flex; flex-direction: column; background: #0d0d0d; border: 1px solid white; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+
+  .nav-btn { font-family: 'Space Mono', monospace; font-size: clamp(0.75rem, 1.1vw, 0.85rem); letter-spacing: 0.15em; text-transform: uppercase; color: blanchedalmond; background: #0d0d0d; border: none; border-bottom: 1px solid white; padding: 1.2rem 4rem; cursor: pointer; display: flex; align-items: center; gap: 1.2rem; width: 320px; transition: background 0.2s; }
+  .nav-btn:last-child { border-bottom: none; }
+  .nav-btn::before { content: '//'; color: #333; transition: color 0.2s; font-weight: bold; }
+  .nav-btn:hover { background: #111; }
+  .nav-btn:hover::before { color: var(--accent); }
+
+  .preview-img { position: fixed; width: 160px; height: 100px; background: #09090b; border: 1px solid #222; opacity: 0; pointer-events: none; z-index: 20; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
+  .preview-img.visible { opacity: 1; border-color: var(--accent); box-shadow: 0 0 25px var(--glow); }
+  .preview-top    { top: 4rem; left: 50%; transform: translateX(-50%) translateY(10px); }
+  .preview-left   { left: 4rem; top: 50%; transform: translateY(-50%) translateX(10px); }
+  .preview-right  { right: 4rem; top: 50%; transform: translateY(-50%) translateX(-10px); }
+  .preview-bottom { bottom: 4rem; left: 50%; transform: translateX(-50%) translateY(-10px); }
+  .preview-top.visible    { transform: translateX(-50%) translateY(0); }
+  .preview-left.visible   { transform: translateY(-50%) translateX(0); }
+  .preview-right.visible  { transform: translateY(-50%) translateX(0); }
+  .preview-bottom.visible { transform: translateX(-50%) translateY(0); }
+  .preview-label { font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.15em; color: #555; text-transform: uppercase; padding: 0.2rem 0.5rem; border: 1px solid #222; background: #09090b; position: absolute; bottom: 0.5rem; right: 0.5rem; }
+  .preview-img.visible .preview-label { color: var(--accent); border-color: rgba(200,245,66,0.3); }
+
+  .section-page { width: 100%; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
+  .section-topbar { flex-shrink: 0; display: flex; align-items: stretch; border-bottom: 1px solid #1c1c1c; background: #080808; z-index: 2; }
+
+  .back-btn { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: white; background: none; border: none; border-right: 1px solid #1c1c1c; cursor: pointer; padding: 0 1.6rem; white-space: nowrap; transition: color 0.2s; display: flex; align-items: center; gap: 0.5rem; }
+  .back-btn::before { content: '<'; }
+  .back-btn:hover { color: var(--accent); filter: blur(2px); }
+
+  .proj-tabs { display: flex; flex: 1; overflow-x: auto; scrollbar-width: none; color: white; }
+  .proj-tabs::-webkit-scrollbar { display: none; }
+
+  .proj-tab { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: white; background: none; border: none; border-right: 1px solid #1c1c1c; padding: 1rem 1.8rem; cursor: pointer; white-space: nowrap; position: relative; }
+  .proj-tab:hover { color: #888; background: #0d0d0d; filter: blur(1px); }
+  .proj-tab.active { color: var(--accent); background: #0d0d0d; }
+  .proj-tab.active::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: var(--accent); }
+  .proj-tab-idx { color: white; margin-right: 0.6rem; }
+  .proj-tab.active .proj-tab-idx { color: rgba(200,245,66,0.4); }
+
+  .section-header { flex-shrink: 0; padding: 2.4rem 60px 1.8rem; border-bottom: 1px solid #111; }
+  .section-category { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.3em; color: var(--accent); text-transform: uppercase; opacity: 0.7; margin-bottom: 0.5rem; }
+  .section-title { font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; font-size: clamp(1.3rem, 2.5vw, 2rem); font-weight: 700; color: white; letter-spacing: 0.15em; text-transform: uppercase; }
+
+  .project-panels { flex: 1; overflow: hidden; position: relative; }
+
+  .project-panel { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; padding: 2.5rem 60px 80px; opacity: 0; pointer-events: none; scrollbar-width: thin; scrollbar-color: #2a2a2a transparent; }
+  .project-panel::-webkit-scrollbar { width: 3px; }
+  .project-panel::-webkit-scrollbar-thumb { background: #2a2a2a; }
+  .project-panel.active { opacity: 1; pointer-events: all; }
+
+  .project-card { border: 1px solid white; background: #090909; }
+  .project-card-inner { display: grid; grid-template-columns: 1fr 1fr; }
+  .project-meta { padding: 2.5rem; border-right: 1px solid #1a1a1a; }
+  .project-number { font-family: 'Space Mono', monospace; font-size: 0.58rem; color: white; letter-spacing: 0.2em; margin-bottom: 1rem; }
+  .project-name { font-family: 'Space Mono', monospace; font-size: clamp(0.85rem, 1.3vw, 1rem); font-weight: 700; color: white; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.4rem; line-height: 1.4; }
+  .project-stack { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 1rem; }
+  .stack-tag { font-family: 'Space Mono', monospace; font-size: 0.52rem; letter-spacing: 0.1em; color: white; border: 1px solid white; padding: 3px 8px; text-transform: uppercase; }
+  .project-link { font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 0.15em; color: var(--accent); text-decoration: none; opacity: 0.6; margin-top: 1.2rem; display: block; }
+  .project-link:hover { opacity: 1; }
+  .project-details { padding: 2.5rem; }
+  .project-bullets { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+  .project-bullets li { font-size: clamp(0.75rem, 1vw, 0.82rem); color: white; line-height: 1.65; padding-left: 1.2rem; position: relative; }
+  .project-bullets li::before { content: '—'; position: absolute; left: 0; color: #2a2a2a; font-family: 'Space Mono', monospace; }
+
+  .project-images { border-top: 1px solid #141414; padding: 1.2rem 2.5rem; display: flex; gap: 8px; align-items: center; min-height: 88px; }
+  .images-label { font-family: 'Space Mono', monospace; font-size: 0.5rem; letter-spacing: 0.15em; color: #444; text-transform: uppercase; margin-right: 0.4rem; white-space: nowrap; }
+
+  .img-slot, .img-show { width: 118px; height: 66px; border: 1px dashed #242424; display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; transition: border-color 0.2s, background 0.2s; position: relative; overflow: hidden; background: #0a0a0a; transition: transform 0.3s; }
+  .img-slot:hover, .img-show:hover { border-color: #555; background: #0f0f0f; }
+  .img-slot:hover { transform: translate(20px, -40px) scale(5); z-index: 3; border: 1px solid white; }
+  .img-slot img, .img-show img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; z-index: 1; }
+
+  @media (max-width: 780px) {
+    .section-header { padding: 1.8rem 24px 1.4rem; }
+    .project-panel  { padding: 1.8rem 24px 60px; }
+    .project-card-inner { grid-template-columns: 1fr; }
+    .project-meta { border-right: none; border-bottom: 1px solid #1a1a1a; padding: 1.6rem; }
+    .project-details { padding: 1.6rem; }
+    .project-images  { padding: 1rem 1.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LANGUAGE SWITCHER -->
+<div class="lang-switcher">
+  <select onchange="if(this.value) window.location.href=this.value">
+    <option value="software.html">EN — English</option>
+    <option value="software_du.html" selected>DE — Deutsch</option>
+  </select>
+</div>
+
+<!-- DEKORATIONS-ECKEN -->
+<div class="corner-decor top-left">
+  <span style="display:block;margin-top:500px;line-height:2;">
+    <span style="color:#666;">def</span> <span style="color:#888;">elastischer_stoss</span>(m1, m2, v1, v2):<br>
+    &nbsp;&nbsp;v1_f = ((m1 - m2)*v1 + 2*m2*v2) / (m1 + m2)<br>
+    &nbsp;&nbsp;v2_f = ((m2 - m1)*v2 + 2*m1*v1) / (m1 + m2)<br>
+    &nbsp;&nbsp;<span style="color:#666;">return</span> v1_f, v2_f<br><br>
+    <span style="color:#666;">def</span> <span style="color:#888;">integrationsschritt</span>(v, a, dt):<br>
+    &nbsp;&nbsp;<span style="color:#666;">return</span> v + a * dt
+  </span>
+</div>
+
+<div class="corner-decor top-right">
+    <span style="color:#666;">double</span> <span style="color:#888;">Beta</span>(<span style="color:#666;">const</span> vector&lt;<span style="color:#666;">double</span>&gt;&amp; s, <span style="color:#666;">const</span> vector&lt;<span style="color:#666;">double</span>&gt;&amp; m) {<br>
+    &nbsp;&nbsp;<span style="color:#666;">if</span> (s.size() != m.size() || s.empty()) <span style="color:#666;">return</span> 0;<br>
+    &nbsp;&nbsp;<span style="color:#666;">double</span> sm = accumulate(s.begin(), s.end(), 0.0) / s.size();<br>
+    &nbsp;&nbsp;<span style="color:#666;">double</span> cov = 0, mvar = 0;<br>
+    &nbsp;&nbsp;<span style="color:#666;">return</span> mvar != 0 ? cov / mvar : 0;<br>
+    }
+</div>
+
+<!-- ════ STARTSEITE ════ -->
+<div class="page active" id="page-home">
+
+  <div class="preview-img preview-top" id="prev-web">
+    <svg width="260" height="160" viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg">
+      <rect width="260" height="160" fill="#09090b"/>
+      <rect x="15" y="25" width="230" height="110" fill="none" stroke="#222" stroke-width="1"/>
+      <circle cx="25" cy="35" r="3" fill="#333"/><circle cx="33" cy="35" r="3" fill="#333"/><circle cx="41" cy="35" r="3" fill="#333"/>
+      <rect x="25" y="50" width="60" height="75" fill="none" stroke="#c8f542" stroke-width="1" stroke-dasharray="2,2" opacity="0.4"/>
+      <rect x="95" y="50" width="140" height="20" fill="none" stroke="#333" stroke-width="1"/>
+      <line x1="95" y1="85" x2="210" y2="85" stroke="#444" stroke-width="2"/>
+      <line x1="95" y1="95" x2="180" y2="95" stroke="#444" stroke-width="2"/>
+    </svg>
+    <span class="preview-label">web_entwicklung</span>
+  </div>
+
+  <div class="preview-img preview-left" id="prev-quant">
+    <svg width="260" height="160" viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg">
+      <rect width="260" height="160" fill="#09090b"/>
+      <g font-family="monospace" font-size="10" fill="#444">
+        <text x="20" y="35">import pandas as pd</text>
+        <text x="20" y="55">def <tspan fill="#c8f542">backtest</tspan>(ticks):</text>
+        <text x="40" y="75" fill="#888">signals = ticks.signals</text>
+        <text x="40" y="95" fill="#c8f542">return pnl.cumsum()</text>
+      </g>
+      <path d="M 20 130 L 70 125 L 110 140 L 160 110 L 200 125 L 240 85" fill="none" stroke="#c8f542" stroke-width="1.5" opacity="0.8"/>
+      <circle cx="240" cy="85" r="2.5" fill="#c8f542"/>
+    </svg>
+    <span class="preview-label">quant_handel</span>
+  </div>
+
+  <div class="preview-img preview-right" id="prev-physics">
+    <svg width="260" height="160" viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg">
+      <rect width="260" height="160" fill="#09090b"/>
+      <circle cx="130" cy="80" r="40" fill="none" stroke="#222" stroke-width="1"/>
+      <circle cx="130" cy="80" r="2" fill="#c8f542"/>
+      <line x1="130" y1="80" x2="165" y2="55" stroke="#c8f542" stroke-width="1.5"/>
+      <polygon points="165,55 157,56 162,62" fill="#c8f542"/>
+      <text x="175" y="53" fill="#e8e4dc" font-family="monospace" font-size="8">F(g)</text>
+      <text x="20" y="145" fill="#333" font-family="monospace" font-size="8">Δt = 0.016s</text>
+    </svg>
+    <span class="preview-label">physik_sim</span>
+  </div>
+
+  <div class="preview-img preview-bottom" id="prev-games">
+    <svg width="260" height="160" viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg">
+      <rect width="260" height="160" fill="#09090b"/>
+      <rect x="80" y="60" width="40" height="40" fill="none" stroke="#333" stroke-width="1"/>
+      <rect x="88" y="68" width="24" height="24" fill="none" stroke="#c8f542" stroke-width="1" stroke-dasharray="3,2" opacity="0.6"/>
+      <line x1="30" y1="115" x2="230" y2="115" stroke="#222" stroke-width="1"/>
+      <text x="20" y="145" fill="#333" font-family="monospace" font-size="8">Punkte: 9840 // Level: 3</text>
+    </svg>
+    <span class="preview-label">spiele</span>
+  </div>
+
+  <div class="nav-center">
+    <div class="site-title">Nolan Coords</div>
+    <div class="site-subtitle">Entwicklungs-Hub | Bereich wählen</div>
+    <div class="nav-buttons">
+      <div class="nav-btn" data-preview="prev-web"     data-target="page-web">Webentwicklung</div>
+      <div class="nav-btn" data-preview="prev-quant"   data-target="page-quant">Quantitativer Handel</div>
+      <div class="nav-btn" data-preview="prev-physics" data-target="page-physics">Physiksimulationen</div>
+      <div class="nav-btn" data-preview="prev-games"   data-target="page-games">Spiele</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ WEBENTWICKLUNG ════ -->
+<div class="page" id="page-web">
+  <div class="section-page">
+    <div class="section-topbar">
+      <button class="back-btn" data-back>Hub</button>
+      <div class="proj-tabs" id="tabs-web">
+        <button class="proj-tab active" data-panel="web-p1"><span class="proj-tab-idx">01</span>Church Navigator</button>
+        <button class="proj-tab"        data-panel="web-p2"><span class="proj-tab-idx">02</span>Wine Cellar App</button>
+      </div>
+    </div>
+    <div class="section-header">
+      <div class="section-category">// 01 — Kategorie</div>
+      <div class="section-title">Webentwicklung</div>
+    </div>
+    <div class="project-panels">
+      <div class="project-panel active" id="web-p1">
+        <div class="project-card">
+          <div class="project-card-inner">
+            <div class="project-meta">
+              <div class="project-number">PROJEKT 1 | FULL-STACK WEBSITE</div>
+              <div class="project-name">NC Orthodox Church Navigator</div>
+              <div class="project-stack">
+                <span class="stack-tag">HTML/CSS/JS</span>
+                <span class="stack-tag">Node.js</span>
+                <span class="stack-tag">Firestore</span>
+                <span class="stack-tag">Google Maps API</span>
+                <span class="stack-tag">Anthropic API</span>
+              </div>
+              <a class="project-link" href="https://orthodoxnavigator.com" target="_blank">orthodoxnavigator.com -></a>
+            </div>
+            <div class="project-details">
+              <ul class="project-bullets">
+                <li>Ein langfristiges Projekt, das Nutzern hilft, orthodoxe Kirchen in der Nähe zu finden und den Kontakt zu lokalen Geistlichen zu erleichtern.</li>
+                <li>Ich habe die gesamte Anwendung mit HTML, CSS und JavaScript entwickelt und Firebase für die Speicherung von Kirchenbewertungen sowie Render für das Deployment auf einer eigenen Domain genutzt.</li>
+                <li>Ich habe die Google Maps API, die Google Calendar API und eine eigene Kirchendatenbank integriert, um Standort-, Termin- und Suchfunktionen im Frontend bereitzustellen.</li>
+                <li>Das Backend erforderte erheblichen Aufwand, um sichere API-Verarbeitung, effizientes Caching und schnelle Ladezeiten zu gewährleisten.</li>
+                <li>Ich pflege und erweitere die Kirchendatenbank fortlaufend mit dem Ziel, die Abdeckung über die Carolinas hinaus auszudehnen.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="project-images">
+            <span class="images-label">Screenshots</span>
+            <div class="img-slot"><img src="nav3.png"></div>
+            <div class="img-slot"><img src="nav2.png"></div>
+            <div class="img-slot"><img src="nav1.png"></div>
+          </div>
+        </div>
+      </div>
+      <div class="project-panel" id="web-p2">
+        <div class="project-card">
+          <div class="project-card-inner">
+            <div class="project-meta">
+              <div class="project-number">PROJEKT 2 // FULL_STACK</div>
+              <div class="project-name">Wine Cellar App</div>
+              <div class="project-stack">
+                <span class="stack-tag">HTML/CSS/JS</span>
+                <span class="stack-tag">Python</span>
+                <span class="stack-tag">Data Science</span>
+                <span class="stack-tag">Node.js</span>
+              </div>
+            </div>
+            <div class="project-details">
+              <ul class="project-bullets">
+                <li>Inspiriert von Untappd, ist dieses Projekt als Plattform zum Entdecken, Katalogisieren und Bewerten von Weinen und Champagnern konzipiert.</li>
+                <li>Dies war ein kollaboratives Projekt, zu dem ich sowohl im Frontend- als auch im Backend-Bereich beigetragen habe.</li>
+                <li>Zu meinen Aufgaben gehörte die Implementierung von Empfehlungslogik für Serviertemperaturen und optimale Dekantierzeiten basierend auf Flaschengröße, Erzeuger und Weinsorte.</li>
+                <li>Das Projekt war nahezu abgeschlossen, als wir beschlossen, eine umfangreiche Datenbank mit Weinproduzenten und -händlern zu integrieren, um Nutzervorlieben lokal abzugleichen.</li>
+                <li>Aus Respekt vor dem federführenden Entwickler habe ich den Quellcode nicht auf meinem GitHub veröffentlicht; Screenshots sind jedoch als Nachweis der Funktionalität enthalten.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="project-images">
+            <span class="images-label">Screenshots</span>
+            <div class="img-slot"><img src="wine3.png"></div>
+            <div class="img-slot"><img src="wine2.png"></div>
+            <div class="img-slot"><img src="wine1.png"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ QUANTITATIVER HANDEL ════ -->
+<div class="page" id="page-quant">
+  <div class="section-page">
+    <div class="section-topbar">
+      <button class="back-btn" data-back>Hub</button>
+      <div class="proj-tabs" id="tabs-quant">
+        <button class="proj-tab active" data-panel="quant-p1"><span class="proj-tab-idx">01</span>Quantsim</button>
+      </div>
+    </div>
+    <div class="section-header">
+      <div class="section-category">// 02 — Kategorie</div>
+      <div class="section-title">Quantitativer Handel</div>
+    </div>
+    <div class="project-panels">
+      <div class="project-panel active" id="quant-p1">
+        <div class="project-card">
+          <div class="project-card-inner">
+            <div class="project-meta">
+              <div class="project-number">PROJEKT_01 // C++ + PYTHON</div>
+              <div class="project-name">Quantsim</div>
+              <div class="project-stack">
+                <span class="stack-tag">C++</span>
+                <span class="stack-tag">Python</span>
+                <span class="stack-tag">Pybind11</span>
+                <span class="stack-tag">Flask</span>
+                <span class="stack-tag">React</span>
+                <span class="stack-tag">NumPy/Pandas</span>
+                <span class="stack-tag">Matplotlib</span>
+              </div>
+              <a class="project-link" href="https://github.com/Quant-App" target="_blank">github.com//Quant-App -></a>
+            </div>
+            <div class="project-details">
+              <ul class="project-bullets">
+                <li>Als Einstieg in den quantitativen Handel entwickelte ich eine Plattform zur quantitativen Aktienanalyse mit Echtzeit-Technischer Analyse und Portfolio-Risikobewertung für über 50 globale Technologieaktien.</li>
+                <li>Die hochperformante C++-Analyse-Engine ist über pybind11 für Python zugänglich, was fehlertolerante Python-Implementierungen ermöglicht und unterbrechungsfreie Analysen sicherstellt.</li>
+                <li>Rollende Risiokennzahlen: 60-Tage-Beta, annualisierte Volatilität, Sharpe-Ratio und CAGR für vergleichende Aktienanalyse.</li>
+                <li>Simulation des Ornstein-Uhlenbeck-Mean-Reversion-Prozesses zur Modellierung stochastischen Preisverhaltens und langfristiger Gleichgewichtsdynamiken.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="project-images">
+            <div class="img-slot"><img src="quant3.png"></div>
+            <div class="img-slot"><img src="quant1.png"></div>
+            <div class="img-slot"><img src="quant2.png"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ PHYSIKSIMULATIONEN ════ -->
+<div class="page" id="page-physics">
+  <div class="section-page">
+    <div class="section-topbar">
+      <button class="back-btn" data-back>Hub</button>
+      <div class="proj-tabs" id="tabs-physics">
+        <button class="proj-tab active" data-panel="phys-p1"><span class="proj-tab-idx">01</span>Elastische Stoß-GUI</button>
+      </div>
+    </div>
+    <div class="section-header">
+      <div class="section-category">// 03 — Kategorie</div>
+      <div class="section-title">Physiksimulationen</div>
+    </div>
+    <div class="project-panels">
+      <div class="project-panel active" id="phys-p1">
+        <div class="project-card">
+          <div class="project-card-inner">
+            <div class="project-meta">
+              <div class="project-number">PROJEKT_01 // PYTHON + SIM</div>
+              <div class="project-name">Elastische Stoß-GUI</div>
+              <div class="project-stack">
+                <span class="stack-tag">Python</span>
+                <span class="stack-tag">Pygame</span>
+                <span class="stack-tag">SciPy</span>
+                <span class="stack-tag">SymPy</span>
+                <span class="stack-tag">Matplotlib</span>
+              </div>
+            </div>
+            <div class="project-details">
+              <ul class="project-bullets">
+                <li>Nach ersten Experimenten mit Physiksimulationen in C++ habe ich das Projekt in Python und Pygame neu aufgebaut und einen interaktiven Simulator für elastische Stöße erstellt.</li>
+                <li>Pythons umfangreiches wissenschaftliches Ökosystem erlaubte es mir, das gesamte Projekt in einer einzigen Sprache zu entwickeln und damit die Komplexität deutlich zu reduzieren.</li>
+                <li>Ich nutzte SciPy und SymPy zur Lösung linearer Gleichungssysteme und Differentialgleichungen – sowohl symbolisch als auch numerisch.</li>
+                <li>Grafische Programmierung war eine der anspruchsvolleren Herausforderungen; ich habe die Benutzeroberfläche bewusst schlicht gehalten und den Fokus auf die Funktionalität gelegt.</li>
+                <li>Dies war meine erste Erfahrung mit Pygame und ermöglichte es mir, Gelerntes aus meinem Python-Kurs in einer realen Physiksimulation anzuwenden.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="project-images">
+            <span class="images-label">Screenshots</span>
+            <div class="img-slot"><img src="col2.png"></div>
+            <div class="img-slot"><img src="col3.png"></div>
+            <div class="img-slot"><img src="col1.png"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ SPIELE ════ -->
+<div class="page" id="page-games">
+  <div class="section-page">
+    <div class="section-topbar">
+      <button class="back-btn" data-back>Hub</button>
+      <div class="proj-tabs" id="tabs-games">
+        <button class="proj-tab active" data-panel="games-p1"><span class="proj-tab-idx">01</span>Galaga++</button>
+      </div>
+    </div>
+    <div class="section-header">
+      <div class="section-category">// 04 — Kategorie</div>
+      <div class="section-title">Spiele</div>
+    </div>
+    <div class="project-panels">
+      <div class="project-panel active" id="games-p1">
+        <div class="project-card">
+          <div class="project-card-inner">
+            <div class="project-meta">
+              <div class="project-number">Projekt 1 | Galaga in Python neu gedacht</div>
+              <div class="project-name">Galaga++</div>
+              <div class="project-stack">
+                <span class="stack-tag">Python</span>
+                <span class="stack-tag">Pygame</span>
+                <span class="stack-tag">NumPy</span>
+              </div>
+              <a class="project-link" href="https://github.com/Galaga-Enhanced" target="_blank">github.com/Galaga-Enhanced -></a>
+            </div>
+            <div class="project-details">
+              <ul class="project-bullets">
+                <li>Eine Neuinterpretation des klassischen Arcade-Spiels aus den 1980ern mit neuen Gegnerbewegungen, progressiver Schwierigkeits-KI und einer neuen Waffe, die strategisch eingesetzt werden kann.</li>
+                <li>Gegnerbewegungen wurden mit NumPy-Arrays implementiert, um Kollisionen zwischen Sprites zu vermeiden. Darauf aufbauend teleportiert eine semi-randomisierte Logik Gegner um den Spieler herum.</li>
+                <li>Für die neue Raketenabschuss-Mechanik habe ich binäre Suchalgorithmen implementiert, die Gegner in einem 2×2-Bereich um den Einschlagpunkt eliminieren.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="project-images">
+            <span class="images-label">Screenshots</span>
+            <div class="img-slot"><img src="gal1.png"></div>
+            <div class="img-slot"><img src="gal2.png"></div>
+            <div class="img-slot"><img src="gal3.png"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentPage = 'page-home';
+
+  function goTo(id) {
+    const cur = document.getElementById(currentPage);
+    const nxt = document.getElementById(id);
+    cur.style.opacity = '0';
+    cur.style.transition = 'opacity 0.2s';
+    setTimeout(() => {
+      cur.classList.remove('active');
+      cur.style.opacity = '';
+      cur.style.transition = '';
+      nxt.classList.add('active');
+      nxt.classList.add('fade-in');
+      setTimeout(() => nxt.classList.remove('fade-in'), 350);
+      currentPage = id;
+    }, 180);
+  }
+
+  document.querySelectorAll('.nav-btn[data-target]').forEach(btn => {
+    const prevId   = btn.dataset.preview;
+    const targetId = btn.dataset.target;
+    const panel    = document.getElementById(prevId);
+    if (panel) {
+      btn.addEventListener('mouseenter', () => panel.classList.add('visible'));
+      btn.addEventListener('mouseleave', () => panel.classList.remove('visible'));
+    }
+    btn.addEventListener('click', () => {
+      if (panel) panel.classList.remove('visible');
+      goTo(targetId);
+    });
+  });
+
+  document.querySelectorAll('[data-back]').forEach(btn => {
+    btn.addEventListener('click', () => goTo('page-home'));
+  });
+
+  document.querySelectorAll('.proj-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const panelId  = tab.dataset.panel;
+      const tabsEl   = tab.closest('.proj-tabs');
+      const panelsEl = tab.closest('.section-page').querySelector('.project-panels');
+      tabsEl.querySelectorAll('.proj-tab').forEach(t => t.classList.remove('active'));
+      panelsEl.querySelectorAll('.project-panel').forEach(p => { p.classList.remove('active'); p.scrollTop = 0; });
+      tab.classList.add('active');
+      document.getElementById(panelId).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

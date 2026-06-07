@@ -30,6 +30,33 @@
     padding: 4rem 1.5rem 2rem;
   }
 
+   
+.lang-switcher {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 9999;
+  font-family: 'Space Mono', monospace;
+}
+.lang-switcher select {
+  background: #0d0d0d;
+  color: #e8e1d4;
+  border: 1px solid #444;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  padding: 6px 24px 6px 10px;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+.lang-switcher select:hover { border-color: #e8e1d4; }
+
+
   .container {
     width: min(900px, 100%);
   }
@@ -213,6 +240,14 @@
 </head>
 
 <body>
+
+<div class="lang-switcher">
+  <select onchange="if(this.value) window.location.href=this.value">
+    <option value="contact_du.html">DE — Deutsch</option>
+    <option value="contact.html" selected>EN — English</option>
+  </select>
+</div>
+
 
 <div class="container">
 

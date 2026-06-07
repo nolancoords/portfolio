@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hardware-Projekte | Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;600&family=Share+Tech+Mono&family=Space+Mono:wght@400;700&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #0b0b0b;
+    --bg2: #121212;
+    --accent: wheat;
+    --accent2: #d6c3a3;
+    --text: #ffffff;
+    --text-muted: #8b8b8b;
+    --border: #1f1f1f;
+    --card-bg: #111111;
+    --wire: wheat;
+    --wire-dim: rgba(245, 222, 179, 0.35);
+    --wire-glow: rgba(245, 222, 179, 0.08);
+    --btn-border: rgba(245, 222, 179, 0.25);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* ── LANGUAGE SWITCHER ── */
+  .lang-switcher {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 9999;
+    font-family: 'Space Mono', monospace;
+  }
+  .lang-switcher select {
+    background: #0d0d0d;
+    color: var(--text);
+    border: 1px solid #444;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    padding: 6px 24px 6px 10px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+  }
+  .lang-switcher select:hover { border-color: var(--text); }
+
+  .element-class { scrollbar-width: none; -ms-overflow-style: none; }
+  .element-class::-webkit-scrollbar { display: none; }
+
+  body {
+    background: radial-gradient(circle at top, rgba(255,255,255,.03), transparent 40%), #0b0b0b;
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  header { padding: 6rem 2rem 4rem; text-align: center; }
+  header .label { color: wheat; letter-spacing: .3em; font-family: 'Space Mono', monospace; font-size: 12px; margin-bottom: 0.75rem; }
+  header h1 { font-family: 'Space Mono', monospace; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 600; letter-spacing: 0.08em; color: #fff; text-transform: uppercase; }
+  header p { margin-top: 0.75rem; font-size: 14px; color: var(--text-muted); font-family: 'Space Mono', monospace; letter-spacing: 0.05em; }
+
+  .timeline-wrap { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 4rem 2rem 6rem calc(2rem + 60px); }
+  .wire-track { position: absolute; left: 3.1rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, transparent 0%, var(--wire) 5%, var(--wire) 95%, transparent 100%); box-shadow: 0 0 8px var(--wire-dim); }
+
+  .project-entry { position: relative; margin-bottom: 4.5rem; opacity: 100%; transform: translateX(20px); }
+
+  @keyframes slideIn { to { opacity: 1; transform: translateX(0); } }
+
+  .project-link {
+    flex: 1; padding: 10px 15px;
+    font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    border: 1px solid white; background: transparent; color: white;
+    cursor: pointer; border-radius: 1px;
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+    text-decoration: none;
+  }
+  .project-link:hover { transform: translateY(-2px); border-color: wheat; color: white; background: rgba(245,222,179,0.06); }
+
+  .diode-arm { position: absolute; left: calc(-60px + 2px); top: 32px; width: 60px; height: 2px; background: var(--wire); box-shadow: 0 0 6px var(--wire-dim); }
+  .diode-arm::before { content: ''; position: absolute; left: 20px; top: -5px; width: 0; height: 0; border-top: 6px solid transparent; border-bottom: 6px solid transparent; border-left: 10px solid var(--wire); filter: drop-shadow(0 0 3px var(--wire)); }
+  .diode-arm::after { content: ''; position: absolute; left: 28px; top: -5px; width: 2px; height: 12px; background: var(--wire); box-shadow: 0 0 4px var(--wire-dim); }
+
+  .wire-node { position: absolute; left: calc(-60px - 6px); top: 28px; width: 11px; height: 10px; border-radius: 50%; background: var(--wire); box-shadow: 0 0 8px var(--wire-dim); }
+
+  .project-card { background: #111; border: 1px solid #222; overflow: hidden; transition: .3s ease; }
+  .project-card:hover { border-color: wheat; transform: translateY(-4px); }
+
+  .img-placeholder { height: 330px; background: #0d0d0d; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 10px; position: relative; overflow: hidden; }
+  .img-placeholder::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(245,222,179,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(245,222,179,0.03) 1px, transparent 1px); background-size: 30px 30px; }
+  .img-placeholder img { width: 100%; height: 100%; object-fit: cover; }
+  .img-placeholder svg { width: 40px; height: 40px; opacity: 0.2; position: relative; }
+  .img-placeholder span { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 0.15em; text-transform: uppercase; position: relative; }
+
+  .card-body { padding: 1.25rem 1.5rem 1.5rem; }
+  .card-header { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 0.6rem; }
+  .project-num { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--accent); opacity: 0.6; letter-spacing: 0.1em; }
+  .project-title { font-family: 'Space Mono', monospace; font-size: 1.3rem; color: white; }
+  .project-desc { font-size: 14px; color: white; line-height: 1.7; font-family: 'DM Sans', sans-serif; margin-bottom: 1.25rem; }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.25rem; }
+  .tag { border: 1px solid #333; color: #cfcfcf; background: #171717; padding: 5px 10px; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.05em; }
+
+  .card-actions { display: flex; gap: 10px; border-top: 1px solid #1e1e1e; padding-top: 1.1rem; }
+
+  .btn { flex: 1; padding: 10px 15px; font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid var(--btn-border); background: transparent; color: wheat; cursor: pointer; border-radius: 1px; transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.15s; display: flex; align-items: center; justify-content: center; gap: 7px; }
+  .btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+  .btn:hover { transform: translateY(-2px); border-color: wheat; color: white; background: rgba(245,222,179,0.06); }
+  .btn:active { transform: scale(0.98); }
+  .btn-info { border-color: rgba(0,207,255,0.4); color: #7fd6f0; }
+  .btn-info:hover { background: rgba(0,207,255,0.08); border-color: rgba(0,207,255,0.8); color: #fff; }
+
+  .wire-end { position: absolute; left: calc(2rem + 14px); bottom: 3rem; width: 10px; height: 10px; border: 2px solid var(--wire); border-radius: 50%; opacity: 0.4; }
+
+  footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border); font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 0.15em; }
+
+  .lightbox-overlay { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.88); backdrop-filter: blur(4px); align-items: center; justify-content: center; animation: fadeOverlay 0.2s ease; }
+  .lightbox-overlay.active { display: flex; }
+  @keyframes fadeOverlay { from { opacity: 0; } to { opacity: 1; } }
+  .lightbox-window { position: relative; background: #111; border: 1px solid rgba(245,222,179,0.3); border-radius: 10px; overflow: hidden; max-width: 90vw; max-height: 88vh; display: flex; flex-direction: column; animation: popIn 0.22s cubic-bezier(0.34,1.56,0.64,1); box-shadow: 0 0 60px rgba(245,222,179,0.08), 0 20px 60px rgba(0,0,0,0.6); }
+  @keyframes popIn { from { opacity: 0; transform: scale(0.93); } to { opacity: 1; transform: scale(1); } }
+  .lightbox-titlebar { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid #222; background: #0d0d0d; flex-shrink: 0; }
+  .lightbox-title { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.15em; color: wheat; text-transform: uppercase; opacity: 0.7; }
+  .lightbox-controls { display: flex; align-items: center; gap: 8px; }
+  .lb-btn { background: #1a1a1a; border: 1px solid #2a2a2a; color: #aaa; width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font-family: 'Space Mono', monospace; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: border-color 0.15s, color 0.15s; line-height: 1; }
+  .lb-btn:hover { border-color: wheat; color: wheat; }
+  .lb-close { background: #1a1a1a; border: 1px solid #2a2a2a; color: #aaa; width: 28px; height: 28px; border-radius: 4px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: border-color 0.15s, color 0.15s; margin-left: 4px; }
+  .lb-close:hover { border-color: #ff5a5a; color: #ff5a5a; }
+  .lightbox-img-wrap { overflow: auto; flex: 1; display: flex; align-items: flex-start; justify-content: center; padding: 16px; cursor: grab; }
+  .lightbox-img-wrap:active { cursor: grabbing; }
+  .lightbox-img-wrap img { display: block; transform-origin: top center; transition: transform 0.15s ease; max-width: 100%; user-select: none; border-radius: 4px; }
+  .lightbox-footer { padding: 8px 16px; border-top: 1px solid #1a1a1a; font-family: 'Space Mono', monospace; font-size: 10px; color: #444; letter-spacing: 0.1em; text-align: center; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<!-- LANGUAGE SWITCHER -->
+<div class="lang-switcher">
+  <select onchange="if(this.value) window.location.href=this.value">
+    <option value="hardware.html">EN — English</option>
+    <option value="hardware_du.html" selected>DE — Deutsch</option>
+  </select>
+</div>
+
+<header>
+  <div class="label">portfolio — hardware</div>
+  <h1>Hardware-Projekte</h1>
+  <p>eingebettete Systeme &middot; Schaltungsdesign &middot; Leiterplattenentwicklung</p>
+</header>
+
+<div class="timeline-wrap">
+  <div class="wire-track"></div>
+
+  <!-- PROJEKT 1 -->
+  <div class="project-entry">
+    <div class="wire-node"></div>
+    <div class="diode-arm"></div>
+    <div class="project-card">
+      <div class="img-placeholder">
+        <img src="drum.png" alt="8-Schritt Drum-Sequencer Foto">
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <span class="project-num">PRJ_001</span>
+          <h2 class="project-title">8-Schritt Drum-Sequencer</h2>
+        </div>
+        <p class="project-desc">
+          Hierbei handelt es sich um das Grundgerüst einer Drum-Machine, die ich entwickelt habe. Bevor alle Drum-Sounds mit analogen Bauteilen erzeugt werden konnten, entwarf, fertigte und programmierte ich den Sequencer. Dieser nimmt die Schritte von vier Instrumentenspuren mithilfe von C++-Arrays und Zeigern digital auf. Als Prototyp diente ein kleiner Buzzer.
+        </p>
+        <div class="tag-row">
+          <span class="tag">C++</span>
+          <span class="tag">Oszilloskop</span>
+          <span class="tag">KiCAD</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn" onclick="openSchematic('schem2.png', 'PRJ_001 — Schaltplan')">
+            <svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Schaltplan
+          </button>
+          <button class="btn btn-info">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Weitere Details
+          </button>
+          <button class="project-link" onclick="window.open('https://github.com/nolancoords/8-step-drum-sequencer', '_blank')">
+            github
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJEKT 2 -->
+  <div class="project-entry">
+    <div class="wire-node"></div>
+    <div class="diode-arm"></div>
+    <div class="project-card">
+      <div class="img-placeholder">
+        <img src="ALU.png" alt="Binäre ALU Projektfoto">
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <span class="project-num">PRJ_002</span>
+          <h2 class="project-title">Binäre Arithmetisch-Logische Einheit</h2>
+        </div>
+        <p class="project-desc">
+          Ein binärer Bit-Rechner, der vier grundlegende ALU-Operationen auf 8-Bit-Zahlen ausführt: ADD, AND, OR und SUB. Ein Arduino UNO wurde in C++ programmiert, um sowohl das LCD-Display als auch die LED-Bit-Anzeige zu steuern.
+        </p>
+        <div class="tag-row">
+          <span class="tag">C++</span>
+          <span class="tag">KiCAD</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn" onclick="openSchematic('schem1.png', 'PRJ_002 — Schaltplan')">
+            <svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Schaltplan
+          </button>
+          <button class="btn btn-info">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Weitere Details
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJEKT 3 -->
+  <div class="project-entry">
+    <div class="wire-node"></div>
+    <div class="diode-arm"></div>
+    <div class="project-card">
+      <div class="img-placeholder">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke="wheat" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <path d="M3 9h18M9 21V9"/>
+          <circle cx="6" cy="6" r="0.5" fill="wheat"/>
+          <circle cx="18" cy="6" r="0.5" fill="#00ff9d"/>
+        </svg>
+        <span>Bild einfügen</span>
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <span class="project-num">PRJ_003</span>
+          <h2 class="project-title">Projektname</h2>
+        </div>
+        <p class="project-desc">
+          Nolan, hier sollte das Orgel-Projekt stehen – was machst du da?
+        </p>
+        <div class="tag-row">
+          <span class="tag">AVR</span>
+          <span class="tag">PWM</span>
+          <span class="tag">Eagle</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn" onclick="openSchematic('schem1.png', 'PRJ_003 — Schaltplan')">
+            <svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Schaltplan
+          </button>
+          <button class="btn btn-info">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Weitere Details
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wire-end"></div>
+</div>
+
+<footer>// Übertragungsende &mdash; weitere Projekte werden geladen</footer>
+
+<!-- SCHALTPLAN-LIGHTBOX -->
+<div class="lightbox-overlay" id="lightbox" onclick="handleOverlayClick(event)">
+  <div class="lightbox-window" id="lightboxWindow">
+    <div class="lightbox-titlebar">
+      <span class="lightbox-title" id="lightboxTitle">Schaltplan</span>
+      <div class="lightbox-controls">
+        <button class="lb-btn" onclick="zoomOut()" title="Verkleinern">−</button>
+        <button class="lb-btn" onclick="zoomReset()" title="Zoom zurücksetzen" style="font-size:11px; width:36px;">1:1</button>
+        <button class="lb-btn" onclick="zoomIn()" title="Vergrößern">+</button>
+        <button class="lb-close" onclick="closeSchematic()" title="Schließen">✕</button>
+      </div>
+    </div>
+    <div class="lightbox-img-wrap" id="lightboxImgWrap">
+      <img id="lightboxImg" src="" alt="Schaltplan">
+    </div>
+    <div class="lightbox-footer">Scrollen zum Zoomen &nbsp;·&nbsp; Klicken &amp; Ziehen zum Schwenken &nbsp;·&nbsp; Esc zum Schließen</div>
+  </div>
+</div>
+
+<script>
+  let currentZoom = 1;
+  const ZOOM_STEP = 0.2, ZOOM_MIN = 0.3, ZOOM_MAX = 4;
+
+  function openSchematic(src, title) {
+    const overlay = document.getElementById('lightbox');
+    const img = document.getElementById('lightboxImg');
+    document.getElementById('lightboxTitle').textContent = title;
+    img.src = src;
+    currentZoom = 1;
+    img.style.transform = 'scale(1)';
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSchematic() {
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('lightbox')) closeSchematic();
+  }
+
+  function applyZoom() {
+    currentZoom = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, currentZoom));
+    document.getElementById('lightboxImg').style.transform = `scale(${currentZoom})`;
+  }
+
+  function zoomIn()    { currentZoom += ZOOM_STEP; applyZoom(); }
+  function zoomOut()   { currentZoom -= ZOOM_STEP; applyZoom(); }
+  function zoomReset() { currentZoom = 1; applyZoom(); }
+
+  document.getElementById('lightboxImgWrap').addEventListener('wheel', function(e) {
+    e.preventDefault();
+    currentZoom += e.deltaY < 0 ? ZOOM_STEP : -ZOOM_STEP;
+    applyZoom();
+  }, { passive: false });
+
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeSchematic(); });
+
+  (function() {
+    const wrap = document.getElementById('lightboxImgWrap');
+    let dragging = false, startX, startY, scrollLeft, scrollTop;
+    wrap.addEventListener('mousedown', function(e) { dragging = true; startX = e.pageX - wrap.offsetLeft; startY = e.pageY - wrap.offsetTop; scrollLeft = wrap.scrollLeft; scrollTop = wrap.scrollTop; });
+    document.addEventListener('mouseup', function() { dragging = false; });
+    document.addEventListener('mouseleave', function() { dragging = false; });
+    wrap.addEventListener('mousemove', function(e) { if (!dragging) return; e.preventDefault(); wrap.scrollLeft = scrollLeft - (e.pageX - wrap.offsetLeft - startX); wrap.scrollTop = scrollTop - (e.pageY - wrap.offsetTop - startY); });
+  })();
+</script>
+
+</body>
+</html>

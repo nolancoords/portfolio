@@ -24,6 +24,33 @@ body{
     position:relative;
 }
 
+ 
+.lang-switcher {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 9999;
+  font-family: 'Space Mono', monospace;
+}
+.lang-switcher select {
+  background: #0d0d0d;
+  color: #e8e1d4;
+  border: 1px solid #444;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  padding: 6px 24px 6px 10px;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+.lang-switcher select:hover { border-color: #e8e1d4; }
+
+
 .element-class {
       scrollbar-width: none;          
       -ms-overflow-style: none;      
@@ -214,6 +241,40 @@ body{
     to{opacity:1;transform:scale(1);}
 }
 
+.back-btn {
+    background:#0d0d0d;
+    position: fixed;
+    left: 50px;
+    top: 50px;
+    border:1px solid rgba(255,255,255,.25);
+    width: 90px;
+  
+    max-height:80vh;
+    display:flex;
+    flex-direction:column;
+    
+    
+}
+
+.back-btn:hover {
+    background:#0d0d0d;
+    position: fixed;
+    left: 50px;
+    top: 50px;
+    border:2px solid rgba(255,255,255,.25);
+    border-color: black;
+    width: 90px;
+    background-color: white;
+    transform: scale(1.2);
+    color: green;
+    max-height:80vh;
+    display:flex;
+    flex-direction:column;
+    
+    
+    
+}
+
 .modal-header{
     display:flex;
     align-items:center;
@@ -379,6 +440,14 @@ footer{
 </head>
 
 <body>
+
+
+<div class="lang-switcher">
+  <select onchange="if(this.value) window.location.href=this.value">
+    <option value="/about_du.html">DE — Deutsch</option>
+    <option value="about.html" selected>EN — English</option>
+  </select>
+</div>
 
 <div class="stock-bg" id="stock-bg"></div>
 
