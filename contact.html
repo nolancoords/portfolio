@@ -4,241 +4,44 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Contact | Portfolio</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;600&display=swap" rel="stylesheet">
-
 <style>
-  :root {
-    --bg: #000000;
-    --card: #4e5259;
-    --text: #e6e6e6;
-    --muted: #9aa4b2;
-    --accent: #ffffff;
-  }
-
-  * { box-sizing: border-box; }
-
-  body {
-    margin: 0;
-    font-family: "DM Sans", sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    padding: 4rem 1.5rem 2rem;
-  }
-
-   
-.lang-switcher {
-  position: fixed;
-  top: 16px;
-  right: 16px;
-  z-index: 9999;
-  font-family: 'Space Mono', monospace;
-}
-.lang-switcher select {
-  background: #0d0d0d;
-  color: #e8e1d4;
-  border: 1px solid #444;
-  font-family: 'Space Mono', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  padding: 6px 24px 6px 10px;
-  cursor: pointer;
-  outline: none;
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 8px center;
-}
-.lang-switcher select:hover { border-color: #e8e1d4; }
-
-
-  .container {
-    width: min(900px, 100%);
-  }
-
-  h1 {
-    font-family: "Space Mono", monospace;
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-  }
-
-  
-
-  p {
-    color: var(--muted);
-    margin-bottom: 2rem;
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-  }
-
-  .card {
-    background: black;
-    border: 1px solid white;
-    padding: 2rem;
-    transition: transform 0.2s ease, border-color 0.2s ease;
-    text-decoration: none;
-    color: var(--text);
-    cursor: pointer;
-    display: block;
-    position: relative;
-  }
-
-  .card:hover {
-    transform: translateY(-3px);
-  }
-
-  .label {
-    font-size: 0.8rem;
-    color: var(--muted);
-    margin-bottom: 0.4rem;
-  }
-
-  .value {
-    font-size: 1rem;
-    word-break: break-word;
-  }
-
-  .copy-hint {
-    font-size: 0.7rem;
-    color: #444;
-    margin-top: 0.5rem;
-    transition: color 0.2s;
-  }
-
-  .card:hover .copy-hint {
-    color: var(--muted);
-  }
-
-  .copied-flash {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.75rem;
-    font-size: 0.75rem;
-    color: var(--accent);
-    opacity: 0;
-    transition: opacity 0.2s;
-    font-family: "Space Mono", monospace;
-  }
-
-  .copied-flash.show {
-    opacity: 1;
-  }
-
-  .footer-note {
-    margin-top: 2rem;
-    font-size: 0.9rem;
-    color: var(--muted);
-  }
-
-  .highlight {
-    color: var(--accent);
-  }
-
-  /* Pendulum */
-  .pendulum-section {
-    width: min(900px, 100%);
-    margin-top: 3rem;
-  }
-
-  .pendulum-text { 
-      top: 0.5rem;
-      left: 0.75rem;
-      font-family: "Space Mono", monospace;
-
-  }
-
-  .pendulum-box {
-    background: #000;
-    border: 1px solid #333;
-    border-color: white; 
-    position: relative;
-    height: 320px;
-    overflow: hidden;
-    user-select: none;
-  }
-
-  .slidecontainer {
-  width: 100%;
-}
-
-  .slider {
-  width: 40%;
-  height: 6px;
-  border-radius: 999px;
-  background: #222;
-  outline: none;
-  appearance: none;
-  cursor: pointer;
-}
-
-/* track fill effect (WebKit) */
-
-
-/* thumb */
-.slider::-webkit-slider-thumb {
-  background: white;
-  -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  
-
-
-  border: 2px solid #000;
-  margin-top: -4px;
-  transition: transform 0.1s ease;
-}
-
-.slider::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
-}
-
-/* Firefox */
-.slider::-moz-range-track {
-  height: 6px;
-  background: #222;
-  border-radius: 999px;
-}
-
-.slider::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: white;
-  border: none;
-}
-  .vel-display {
-    position: absolute;
-    top: 10px;
-    right: 14px;
-    font-family: "Space Mono", monospace;
-    font-size: 0.75rem;
-    color: var(--muted);
-    pointer-events: none;
-    color: white;
-  }
-
-  .drag-hint {
-    position: absolute;
-    bottom: 10px;
-    left: 14px;
-    font-size: 0.7rem;
-    color: #333;
-    font-family: "Space Mono", monospace;
-    pointer-events: none;
-  }
+  :root { --bg:#000; --card:#4e5259; --text:#e6e6e6; --muted:#9aa4b2; --accent:#ffffff; }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:4rem 1.5rem 2rem;}
+  .lang-switcher{position:fixed;top:16px;right:16px;z-index:9999;font-family:'Space Mono',monospace;}
+  .lang-switcher select{background:#0d0d0d;color:#e8e1d4;border:1px solid #444;font-family:'Space Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;padding:6px 24px 6px 10px;cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;}
+  .lang-switcher select:hover{border-color:#e8e1d4;}
+  .container{width:min(900px,100%);}
+  h1{font-family:"Space Mono",monospace;font-size:2rem;margin-bottom:0.5rem;}
+  p{color:var(--muted);margin-bottom:2rem;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;}
+  .card{background:black;border:1px solid white;padding:2rem;transition:transform 0.2s ease,border-color 0.2s ease;text-decoration:none;color:var(--text);cursor:pointer;display:block;position:relative;}
+  .card:hover{transform:translateY(-3px);}
+  .label{font-size:0.8rem;color:var(--muted);margin-bottom:0.4rem;}
+  .value{font-size:1rem;word-break:break-word;}
+  .copy-hint{font-size:0.7rem;color:#444;margin-top:0.5rem;transition:color 0.2s;}
+  .card:hover .copy-hint{color:var(--muted);}
+  .copied-flash{position:absolute;top:0.5rem;right:0.75rem;font-size:0.75rem;color:var(--accent);opacity:0;transition:opacity 0.2s;font-family:"Space Mono",monospace;}
+  .copied-flash.show{opacity:1;}
+  .footer-note{margin-top:2rem;font-size:0.9rem;color:var(--muted);}
+  .highlight{color:var(--accent);}
+  .pendulum-section{width:min(900px,100%);margin-top:3rem;}
+  .pendulum-box{background:#000;border:1px solid white;position:relative;height:360px;overflow:hidden;user-select:none;}
+  .vel-display{position:absolute;top:10px;right:14px;font-family:"Space Mono",monospace;font-size:0.75rem;color:white;pointer-events:none;}
+  .drag-hint{position:absolute;bottom:10px;left:14px;font-size:0.7rem;color:#444;font-family:"Space Mono",monospace;pointer-events:none;}
+  .trail-toggle{position:absolute;top:10px;left:14px;font-family:"Space Mono",monospace;font-size:0.7rem;color:#666;cursor:pointer;padding:4px 8px;border:1px solid #333;background:transparent;transition:color 0.2s,border-color 0.2s;}
+  .trail-toggle:hover,.trail-toggle.on{color:#e6e6e6;border-color:#888;}
+  .slidecontainer{width:100%;margin-top:0.5rem;}
+  .slider{width:40%;height:6px;border-radius:999px;background:#222;outline:none;appearance:none;cursor:pointer;}
+  .slider::-webkit-slider-thumb{background:white;-webkit-appearance:none;width:18px;height:18px;border-radius:50%;border:2px solid #000;margin-top:-4px;transition:transform 0.1s ease;}
+  .slider::-webkit-slider-thumb:hover{transform:scale(1.2);}
+  .slider::-moz-range-track{height:6px;background:#222;border-radius:999px;}
+  .slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:white;border:none;}
+  .controls-row{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;margin-top:0.75rem;}
+  .controls-row p{margin:0;color:var(--muted);font-size:0.85rem;}
 </style>
 </head>
-
 <body>
 
 <div class="lang-switcher">
@@ -248,242 +51,239 @@
   </select>
 </div>
 
-
 <div class="container">
-
   <h1>Contact</h1>
-  <p>
-    Open to collaboration, freelance work, and <span class="highlight">interviews</span>.
-  </p>
-
+  <p>Open to collaboration, freelance work, and <span class="highlight">interviews</span>.</p>
   <div class="grid">
-
-    <div class="card" id="email-card" onclick="copyToClipboard('nolancoords@gmail.com', 'email-flash')">
+    <div class="card" id="email-card" onclick="copyToClipboard('nolancoords@gmail.com','email-flash')">
       <div class="label">Email</div>
       <div class="value">nolancoords@gmail.com</div>
       <div class="copy-hint">click to copy</div>
       <span class="copied-flash" id="email-flash">copied!</span>
     </div>
-
     <a class="card" href="https://github.com/nolancoords" target="_blank">
       <div class="label">GitHub</div>
       <div class="value">github.com/nolancoords</div>
     </a>
-
     <a class="card" href="https://www.linkedin.com/in/nolan-coords/" target="_blank">
       <div class="label">LinkedIn</div>
       <div class="value">www.linkedin.com/in/nolan-coords</div>
     </a>
-
-    <div class="card" id="phone-card" onclick="copyToClipboard('+13365282174', 'phone-flash')">
+    <div class="card" id="phone-card" onclick="copyToClipboard('+13365282174','phone-flash')">
       <div class="label">Phone</div>
       <div class="value">+1 (336) 528-2174</div>
       <div class="copy-hint">click to copy</div>
       <span class="copied-flash" id="phone-flash">copied!</span>
     </div>
-
   </div>
-
-  <div class="footer-note">
-    Currently <span class="highlight">available for interview</span> and open to interesting projects.
-  </div>
-
+  <div class="footer-note">Currently <span class="highlight">available for interview</span> and open to interesting projects.</div>
 </div>
-
-
 
 <div class="pendulum-section">
-  <div class="card">short simple harmonic motion simulation</div>
-
+  <div class="card">double pendulum — chaotic system simulation</div>
   <div class="pendulum-box" id="pendulum-box">
-    <div class="vel-display" id="vel-display">vel: 0.00 rad/s</div>
+    <button class="trail-toggle" id="trail-btn" onclick="toggleTrail()">trail: off</button>
+    <div class="vel-display" id="vel-display">ω₁: 0.00 | ω₂: 0.00 rad/s</div>
     <canvas id="pendulum-canvas"></canvas>
-    <div class="drag-hint">drag the bob</div>
-
-
-</div>
+    <div class="drag-hint">drag either bob</div>
+  </div>
+  <div class="controls-row">
     <div class="slidecontainer">
-        <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-        <p>Mass: <span id="demo"></span></p>
+      <input type="range" min="10" max="100" value="50" class="slider" id="m1Range">
+      <p>Mass 1: <span id="m1Val">50</span></p>
+    </div>
+    <div class="slidecontainer">
+      <input type="range" min="10" max="100" value="50" class="slider" id="m2Range">
+      <p>Mass 2: <span id="m2Val">50</span></p>
     </div>
   </div>
-
+</div>
 
 <script>
-  var slider = document.getElementById("myRange");
-  var output = document.getElementById("demo");
-  output.innerHTML = slider.value;
-
-
-  slider.oninput = function() {
-
-    output.innerHTML = this.value;
-  }
-
-  slider.addEventListener("input", function () {
-  const percent = this.value;
-
-  document.documentElement.style.setProperty("--slider-val", percent);
+function copyToClipboard(text,flashId){
+  navigator.clipboard.writeText(text).then(()=>{
+    const f=document.getElementById(flashId);
+    f.classList.add('show');
+    setTimeout(()=>f.classList.remove('show'),1500);
   });
+}
 
+const box=document.getElementById('pendulum-box');
+const canvas=document.getElementById('pendulum-canvas');
+const ctx=canvas.getContext('2d');
+const velDisplay=document.getElementById('vel-display');
+const m1Range=document.getElementById('m1Range');
+const m2Range=document.getElementById('m2Range');
+document.getElementById('m1Val').textContent=m1Range.value;
+document.getElementById('m2Val').textContent=m2Range.value;
+m1Range.oninput=function(){document.getElementById('m1Val').textContent=this.value;};
+m2Range.oninput=function(){document.getElementById('m2Val').textContent=this.value;};
 
-  function copyToClipboard(text, flashId) {
-    navigator.clipboard.writeText(text).then(() => {
-      const flash = document.getElementById(flashId);
-      flash.classList.add('show');
-      setTimeout(() => flash.classList.remove('show'), 1500);
-    });
-  }
+let W,H,pivotX,pivotY,L1,L2;
+function resize(){
+  W=box.clientWidth; H=box.clientHeight;
+  canvas.width=W; canvas.height=H;
+  pivotX=W/2; pivotY=H*0.1;
+  L1=H*0.32; L2=H*0.32;
+}
+resize();
+window.addEventListener('resize',resize);
 
-  const box = document.getElementById('pendulum-box');
-  const canvas = document.getElementById('pendulum-canvas');
-  const ctx = canvas.getContext('2d');
-  const velDisplay = document.getElementById('vel-display');
+const g=9.81;
+let a1=Math.PI/2, a2=Math.PI/3;
+let v1=0, v2=0;
+let dragging=null;
+let lastTime=null;
+let showTrail=false;
+let trail=[];
+const MAX_TRAIL=300;
 
-  let W, H, pivotX, pivotY, L;
+function toggleTrail(){
+  showTrail=!showTrail;
+  const btn=document.getElementById('trail-btn');
+  btn.textContent='trail: '+(showTrail?'on':'off');
+  btn.classList.toggle('on',showTrail);
+  if(!showTrail) trail=[];
+}
 
-  function resize() {
-    W = box.clientWidth ;
-    H = box.clientHeight;
-    canvas.width = W ;
-    canvas.height = H;
-    pivotX = W / 2;
-    pivotY = H * 0.08;
-    L = H * 0.6;
-  }
-  resize();
-  window.addEventListener('resize', resize);
+function bob1(){return{x:pivotX+L1*Math.sin(a1),y:pivotY+L1*Math.cos(a1)};}
+function bob2(){const b1=bob1();return{x:b1.x+L2*Math.sin(a2),y:b1.y+L2*Math.cos(a2)};}
 
-  function getMass() {
-    return Number(slider.value);
-  }
-  const g = 9.81;
-  let angle = Math.PI / 6;
-  let omega = 0;
-  let dragging = false;
-  let lastTime = null;
-  const mass = slider.value;
-  const damping = 1 - (0.02 / getMass() );
+function derivs(a1,a2,v1,v2,m1,m2){
+  const d=2*m1+m2-m2*Math.cos(2*a1-2*a2);
+  const a1dd=(-g*(2*m1+m2)*Math.sin(a1)-m2*g*Math.sin(a1-2*a2)-2*Math.sin(a1-a2)*m2*(v2*v2*L2+v1*v1*L1*Math.cos(a1-a2)))/(L1*d);
+  const a2dd=(2*Math.sin(a1-a2)*((v1*v1*L1*(m1+m2)+g*(m1+m2)*Math.cos(a1)+v2*v2*L2*m2*Math.cos(a1-a2))))/(L2*d);
+  return{a1dd,a2dd};
+}
 
-  function bobPos() {
-    return {
-      x: pivotX + L * Math.sin(angle),
-      y: pivotY + L * Math.cos(angle)
-    };
-  }
+function step(ts){
+  if(!lastTime) lastTime=ts;
+  const raw=(ts-lastTime)/1000;
+  lastTime=ts;
+  const dt=Math.min(raw,0.03);
 
-  function draw() {
-    ctx.clearRect(0, 0, W , H);
-
-    const bob = bobPos();
-
-    /* dashed rest line */
-    ctx.strokeStyle = '#333';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([4, 4]);
-    ctx.beginPath();
-    ctx.moveTo(pivotX, pivotY);
-    ctx.lineTo(pivotX, pivotY + L);
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    /* rod */
-    ctx.strokeStyle = '#e6e6e6';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(pivotX, pivotY);
-    ctx.lineTo(bob.x, bob.y);
-    ctx.stroke();
-
-    /* pivot */
-    ctx.fillStyle = '#000';
-    ctx.strokeStyle = '#fff';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.arc(pivotX, pivotY, 5, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.stroke();
-
-    /* bob */
-    ctx.fillStyle = dragging ? '#fff' : '#e6e6e6';
-    ctx.strokeStyle = '#fff';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.arc(bob.x, bob.y, 16 * (slider.value / 30), 0, Math.PI * 2);
-    ctx.fill();
-    ctx.stroke();
-  }
-
-  function step(ts) {
-    if (!lastTime) lastTime = ts;
-    const dt = Math.min((ts - lastTime) * 4/ 1000, 0.05);
-    lastTime = ts;
-
-    if (!dragging) {
-      const alpha = -(g / L) * Math.sin(angle);
-      omega += alpha * dt;
-      omega *= Math.exp(-0.5 * dt * (1 / mass));
-      angle += omega * dt;
+  if(!dragging){
+    const m1=Number(m1Range.value), m2=Number(m2Range.value);
+    const steps=8;
+    const h=dt/steps;
+    for(let i=0;i<steps;i++){
+      const d1=derivs(a1,a2,v1,v2,m1,m2);
+      const k1a1=v1, k1a2=v2, k1v1=d1.a1dd, k1v2=d1.a2dd;
+      const d2=derivs(a1+h/2*k1a1,a2+h/2*k1a2,v1+h/2*k1v1,v2+h/2*k1v2,m1,m2);
+      const k2a1=v1+h/2*k1v1, k2a2=v2+h/2*k1v2, k2v1=d2.a1dd, k2v2=d2.a2dd;
+      const d3=derivs(a1+h/2*k2a1,a2+h/2*k2a2,v1+h/2*k2v1,v2+h/2*k2v2,m1,m2);
+      const k3a1=v1+h/2*k2v1, k3a2=v2+h/2*k2v2, k3v1=d3.a1dd, k3v2=d3.a2dd;
+      const d4=derivs(a1+h*k3a1,a2+h*k3a2,v1+h*k3v1,v2+h*k3v2,m1,m2);
+      const k4a1=v1+h*k3v1, k4a2=v2+h*k3v2, k4v1=d4.a1dd, k4v2=d4.a2dd;
+      a1+=(h/6)*(k1a1+2*k2a1+2*k3a1+k4a1);
+      a2+=(h/6)*(k1a2+2*k2a2+2*k3a2+k4a2);
+      v1+=(h/6)*(k1v1+2*k2v1+2*k3v1+k4v1);
+      v2+=(h/6)*(k1v2+2*k2v2+2*k3v2+k4v2);
+      const damp=0.9995;
+      v1*=damp; v2*=damp;
     }
-
-    velDisplay.textContent = `vel: ${Math.abs(omega).toFixed(2)} rad/s`;
-    draw();
-    requestAnimationFrame(step);
+    const b2=bob2();
+    if(showTrail){
+      trail.push({x:b2.x,y:b2.y});
+      if(trail.length>MAX_TRAIL) trail.shift();
+    }
   }
 
+  velDisplay.textContent=`ω₁: ${Math.abs(v1).toFixed(2)} | ω₂: ${Math.abs(v2).toFixed(2)} rad/s`;
+  draw();
   requestAnimationFrame(step);
+}
 
-  function getAngleFromPointer(clientX, clientY) {
-    const rect = canvas.getBoundingClientRect();
-    const mx = clientX - rect.left;
-    const my = clientY - rect.top;
-    return Math.atan2(mx - pivotX, my - pivotY);
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  const b1=bob1(), b2=bob2();
+  const m1=Number(m1Range.value), m2=Number(m2Range.value);
+  const r1=8+10*(m1/100), r2=8+10*(m2/100);
+
+  if(showTrail && trail.length>1){
+    for(let i=1;i<trail.length;i++){
+      const alpha=i/trail.length;
+      ctx.strokeStyle=`rgba(255,255,255,${alpha*0.6})`;
+      ctx.lineWidth=1;
+      ctx.beginPath();
+      ctx.moveTo(trail[i-1].x,trail[i-1].y);
+      ctx.lineTo(trail[i].x,trail[i].y);
+      ctx.stroke();
+    }
   }
 
-  function hitBob(clientX, clientY) {
-    const rect = canvas.getBoundingClientRect();
-    const mx = clientX - rect.left;
-    const my = clientY - rect.top;
-    const bob = bobPos();
-    const dx = mx - bob.x;
-    const dy = my - bob.y;
-    return Math.sqrt(dx * dx + dy * dy) < 28;
+  ctx.strokeStyle='#333'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.moveTo(pivotX,pivotY); ctx.lineTo(pivotX,pivotY+L1+L2); ctx.stroke();
+  ctx.setLineDash([]);
+
+  ctx.strokeStyle='#e6e6e6'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(pivotX,pivotY); ctx.lineTo(b1.x,b1.y); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(b1.x,b1.y); ctx.lineTo(b2.x,b2.y); ctx.stroke();
+
+  ctx.fillStyle='#000'; ctx.strokeStyle='#fff'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.arc(pivotX,pivotY,5,0,Math.PI*2); ctx.fill(); ctx.stroke();
+
+  ctx.fillStyle=dragging===1?'#fff':'#e6e6e6'; ctx.strokeStyle='#fff'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.arc(b1.x,b1.y,r1,0,Math.PI*2); ctx.fill(); ctx.stroke();
+
+  ctx.fillStyle=dragging===2?'#fff':'#bbb'; ctx.strokeStyle='#fff'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.arc(b2.x,b2.y,r2,0,Math.PI*2); ctx.fill(); ctx.stroke();
+}
+
+function getAngle(px,py,cx,cy){return Math.atan2(px-cx,py-cy);}
+
+function hitTest(clientX,clientY){
+  const rect=canvas.getBoundingClientRect();
+  const mx=clientX-rect.left, my=clientY-rect.top;
+  const b1=bob1(), b2=bob2();
+  const m1=Number(m1Range.value), m2=Number(m2Range.value);
+  const r1=8+10*(m1/100)+8, r2=8+10*(m2/100)+8;
+  if(Math.hypot(mx-b2.x,my-b2.y)<r2) return 2;
+  if(Math.hypot(mx-b1.x,my-b1.y)<r1) return 1;
+  return 0;
+}
+
+function pointerAngle(clientX,clientY,bob){
+  const rect=canvas.getBoundingClientRect();
+  const mx=clientX-rect.left, my=clientY-rect.top;
+  if(bob===1) return getAngle(mx,my,pivotX,pivotY);
+  const b1=bob1(); return getAngle(mx,my,b1.x,b1.y);
+}
+
+canvas.addEventListener('mousedown',e=>{
+  const h=hitTest(e.clientX,e.clientY);
+  if(h){dragging=h;v1=0;v2=0;}
+});
+window.addEventListener('mousemove',e=>{
+  if(!dragging) return;
+  if(dragging===1){
+    a1=pointerAngle(e.clientX,e.clientY,1);
+    a1=Math.max(-Math.PI*0.95,Math.min(Math.PI*0.95,a1));
+  } else {
+    a2=pointerAngle(e.clientX,e.clientY,2);
   }
+});
+window.addEventListener('mouseup',()=>{dragging=null;});
 
-  canvas.addEventListener('mousedown', e => {
-    if (hitBob(e.clientX, e.clientY)) {
-      dragging = true;
-      omega = 0;
-    }
-  });
+canvas.addEventListener('touchstart',e=>{
+  const t=e.touches[0];
+  const h=hitTest(t.clientX,t.clientY);
+  if(h){dragging=h;v1=0;v2=0;e.preventDefault();}
+},{passive:false});
+window.addEventListener('touchmove',e=>{
+  if(!dragging) return;
+  const t=e.touches[0];
+  if(dragging===1){
+    a1=pointerAngle(t.clientX,t.clientY,1);
+    a1=Math.max(-Math.PI*0.95,Math.min(Math.PI*0.95,a1));
+  } else {
+    a2=pointerAngle(t.clientX,t.clientY,2);
+  }
+  e.preventDefault();
+},{passive:false});
+window.addEventListener('touchend',()=>{dragging=null;});
 
-  window.addEventListener('mousemove', e => {
-    if (!dragging) return;
-    angle = getAngleFromPointer(e.clientX, e.clientY);
-    angle = Math.max(-Math.PI * 0.9, Math.min(Math.PI * 0.9, angle));
-  });
-
-  window.addEventListener('mouseup', () => { dragging = false; });
-
-  canvas.addEventListener('touchstart', e => {
-    const t = e.touches[0];
-    if (hitBob(t.clientX, t.clientY)) {
-      dragging = true;
-      omega = 0;
-      e.preventDefault();
-    }
-  }, { passive: false });
-
-  window.addEventListener('touchmove', e => {
-    if (!dragging) return;
-    const t = e.touches[0];
-    angle = getAngleFromPointer(t.clientX, t.clientY);
-    angle = Math.max(-Math.PI * 0.9, Math.min(Math.PI * 0.9, angle));
-    e.preventDefault();
-  }, { passive: false });
-
-  window.addEventListener('touchend', () => { dragging = false; });
+requestAnimationFrame(step);
 </script>
-
 </body>
 </html>
