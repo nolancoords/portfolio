@@ -473,12 +473,18 @@ footer{
             I am an Electrical Engineering student studying at North Carolina State University, and I enjoy making a wide variety of things. I am currently studying to go into the power industry, and hope to also gain insight into embedded systems and software simulation. 
             
         </p>
+        <p>-</p>
         <p>
-           My expirience mostly comes from either school or my <a ="http://127.0.0.1:5500/software.html">projects</a>. As I have many interests, my projects often reflect that. I have built projects in areas of power systems, embedded systems, quantitative trading, web development, physics modeling, and games. 
-
+           My expirience mostly comes from either school or my <a ="http://127.0.0.1:5500/software.html">projects</a>. As I have many interests, my projects often reflect that. I have built projects in areas of power systems, embedded systems, quantitative trading, web development, physics modeling, and games
+            
         </p>
+        <p>-</p>
         <p>
-                      I am also a current intern working for HBK Engineering in Raleigh, where I am focusing on power systems analysis, field data collection, and CAD based design workflows. 
+                      I am also a current intern working for HBK Engineering in Raleigh, where I built an automated web application (JavaScript, HTML, CSS, Node.js) that automatically extracts utility pole IDs and equipment metadata from field images whcih ended up cutting up to 2 hours of manual engineering report preparation per project 
+        <p>-</p>
+                      I also get to make top-down views of streets and electrical utilities using AutoCAD’s Geolocation tools while labeling utilities, measuring distances, and marking potential replacement hazards
+        <p>-</p>
+                    Finally, I also work on single-line diagrams for single-, double-, and triple-phase transformer circuits in KiCad to support accurate voltage measurement and engineering analysis
 
         </p>
     </div>
@@ -508,7 +514,7 @@ footer{
             <button class="skill" data-skill="Mathematics">Mathematics</button>
             <button class="skill" data-skill="Matplotlib">Matplotlib</button>
             <button class="skill" data-skill="Lua">Lua</button>
-            <button class="skill" data-skill="Pandas">Pandas</button>
+            <button class="skill" data-skill="Assembly">Assembly</button>
             <button class="skill" data-skill="NumPy">NumPy</button>
         </div>
     </div>
@@ -879,7 +885,7 @@ footer{
 <div class="modal-overlay" id="skillModal" onclick="handleModalOverlayClick(event)">
   <div class="modal-box" id="skillModalBox">
     <div class="modal-header">
-      <div class="modal-title">projects using — <span id="modalSkillName"></span></div>
+      <div class="modal-title">Skill: <span id="modalSkillName"></span></div>
       <button class="modal-close" onclick="closeSkillModal()">✕</button>
     </div>
     <div class="modal-body" id="modalBody"></div>
@@ -958,14 +964,16 @@ const SKILL_PROJECTS = {
   "Mathematics": [
     { name:"Quantsim", source:"software", desc:"Rolling-window risk metrics: beta, Sharpe, CAGR, Ornstein-Uhlenbeck", link:"https://github.com/Quant-App" },
     { name:"Elastic Collision GUI", source:"software", desc:"Systems of ODEs & linear equations via SciPy/SymPy", link:null },
+    { name:"Certifcate of Acheivement in Mathematics", source:"software", desc:"Awarded to one out of five-thousand students at Davidson-Davie Community-College", link:null },
   ],
   "Matplotlib": [
     { name:"Quantsim", source:"software", desc:"Equity charts and portfolio risk visualizations", link:"https://github.com/Quant-App" },
     { name:"Elastic Collision GUI", source:"software", desc:"Physics state visualization", link:null },
   ],
   "Lua": [],
-  "Pandas": [
-    { name:"Quantsim", source:"software", desc:"Tick data processing and rolling-window analytics", link:"https://github.com/Quant-App" },
+  "Assembly": [
+    { name:"Tic-Tac-Toe", source:"software", desc:"Tic-Tac-Toe game written in a natural Windows Assembly enviorment with GoLink", link:"https://github.com/nolancoords/Tic-Tassembly-Toe" },
+    { name:"Binary ALU", source:"hardware", desc:"Half-written in Assembly's AVL Assembly language", link:null },
   ],
   "NumPy": [
     { name:"Quantsim", source:"software", desc:"Numerical computation for equity analysis", link:"https://github.com/Quant-App" },
@@ -975,7 +983,9 @@ const SKILL_PROJECTS = {
     { name:"8-Step Beat Drum Sequencer", source:"hardware", desc:"PCB schematic design", link:"https://github.com/nolancoords/8-step-drum-sequencer" },
     { name:"Binary ALU", source:"hardware", desc:"PCB schematic design", link:null },
   ],
-  "AutoCAD": [],
+  "AutoCAD": [
+    { name:"HBK Engineering: Electrical Poling Design", source:"hardware", desc:"Internship hands on AutoCAD expirience", link: null},
+  ],
   "MATLAB": [],
   "Simulink": [],
   "Microcontroller Programming": [

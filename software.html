@@ -784,6 +784,7 @@
       <button class="back-btn" data-back>Hub</button>
       <div class="proj-tabs" id="tabs-games">
         <button class="proj-tab active" data-panel="games-p1"><span class="proj-tab-idx">01</span>Galaga++</button>
+        <button class="proj-tab disabled" data-panel="games-p2"><span class="proj-tab-idx">01</span>Tic-Tassembly-Toe</button>
       </div>
     </div>
 
@@ -819,6 +820,37 @@
             <div class="img-slot"><img src="gal1.png"></div>
             <div class="img-slot"><img src="gal2.png"></div>
             <div class="img-slot"><img src="gal3.png"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-panel disabled" id="games-p2">
+        <div class="project-card">
+          <div class="project-card-inner">
+            <div class="project-meta">
+              <div class="project-number">Project 2 | Tic-Tac-Toe in x86 Assembly</div>
+              <div class="project-name">Tic-Tassembly-Toe</div>
+              <div class="project-stack">
+                <span class="stack-tag">Assembly</span>
+                <span class="stack-tag">x86 Assembly</span>
+                <span class="stack-tag">GoLink</span>
+              </div>
+              <a class="project-link" href="https://github.com/nolancoords/Tic-Tassembly-Toe" target="_blank">https://github.com/nolancoords/Tic-Tassembly-Toe -></a>
+            </div>
+            <div class="project-details">
+              <ul class="project-bullets">
+                <li>Because of course we havent seen enough tic-tac-toe games. But regardless this project began with an assignment in school for lc-3 assembly. Before we were taught lc-3, I had already studied a good bit of x86 64 Assembly for Windows, hense I took it upon myself to make it in a new enviorment.</li>
+                <li>I Used direct 64-bit Assembly registers and raw Windows API bindings by manually orchestrating standard Microsoft fastcall calling conventions (leveraging rcx, rdx, r8, and r9 for sub-routine parameters) achieving high-performance, real-time input processing and a highly responsive Win32 event loop.</li>
+                <li>I then used the Windows Graphical Device Interface (GDI) by dynamically allocating device contexts (HDC) and managing manual pixel coordinates achieving custom, fluid rendering of the game board grid, dynamic game state text, and geometric drawing of game pieces without relying on third-party UI engines.</li>
+                <li>I also used the specialized GoLink linker by resolving system DLL exports directly (like User32.dll and Gdi32.dll) without bloated Microsoft visual studio SDK import libraries achieving an ultra-lean, highly optimized native executable (.exe) under 5KB with zero external runtime dependencies.</li>
+                <li>I finally used structured assembly patterns by manually coding stack alignment, branch logic, data sections, and pointer mathematics achieving a robust, bug-free game state engine that flawlessly evaluates winning matrices, tracks board status arrays, and intercepts keyboard hooks.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="project-images">
+            <span class="images-label">Screenshots</span>
+            <div class="img-slot"><img src="tic3.png"></div>
+            <div class="img-slot"><img src="tic2.png"></div>
           </div>
         </div>
       </div>
