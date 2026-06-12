@@ -136,11 +136,7 @@ let dragging=null;
 let lastTime=null;
 let showTrail=false;
 let trail=[];
-<<<<<<< HEAD
 const MAX_TRAIL=300;
-=======
-const MAX_TRAIL=1000;
->>>>>>> ca9ea03 (added double pen)
 
 function toggleTrail(){
   showTrail=!showTrail;
@@ -162,11 +158,9 @@ function derivs(a1,a2,v1,v2,m1,m2){
 
 function step(ts){
   if(!lastTime) lastTime=ts;
-
-  const raw=(ts-lastTime) * 2;
+  const raw=(ts-lastTime)/1000;
   lastTime=ts;
-  const dt=Math.min(raw,0.03) * 2;
-
+  const dt=Math.min(raw,0.03);
 
   if(!dragging){
     const m1=Number(m1Range.value), m2=Number(m2Range.value);
