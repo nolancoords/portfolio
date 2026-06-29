@@ -392,7 +392,7 @@
     letter-spacing: 0.15em;
   }
 
-  /* ── SCHEMATIC LIGHTBOX ── */
+  /* ── LIGHTBOX COMMON OVERLAYS ── */
   .lightbox-overlay {
     display: none;
     position: fixed;
@@ -533,6 +533,36 @@
     text-align: center;
     flex-shrink: 0;
   }
+
+  /* ── MORE INFO MODAL SPECIFIC STYLES ── */
+  .info-window {
+    width: 600px;
+    max-width: 95vw;
+  }
+  .info-content-wrap {
+    padding: 24px;
+    overflow-y: auto;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #e0e0e0;
+  }
+  .info-content-wrap ul {
+    list-style-type: none;
+  }
+  .info-content-wrap li {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 12px;
+  }
+  .info-content-wrap li::before {
+    content: "▪";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 10px;
+    top: 2px;
+  }
 </style>
 </head>
 <body>
@@ -554,15 +584,12 @@
 <div class="timeline-wrap">
   <div class="wire-track"></div>
 
-  <!-- PROJECT 1 -->
   <div class="project-entry">
     <div class="wire-node"></div>
     <div class="diode-arm"></div>
     <div class="project-card">
       <div class="img-placeholder">
-      <div class="img-placeholder">
         <img src="drum.png" alt="Binary ALU project photo">
-      </div>
       </div>
       <div class="card-body">
         <div class="card-header">
@@ -582,19 +609,18 @@
             <svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
             Schematic
           </button>
-          <button class="btn btn-info">
+          <button class="btn btn-info" onclick="openInfo('PRJ_001')">
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             More Information
           </button>
-            <button class="project-link" onclick="window.open('https://github.com/nolancoords/8-step-drum-sequencer', '_blank')">
-              github
-            </button>
+          <button class="project-link" onclick="window.open('https://github.com/nolancoords/8-step-drum-sequencer', '_blank')">
+            github
+          </button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- PROJECT 2 -->
   <div class="project-entry">
     <div class="wire-node"></div>
     <div class="diode-arm"></div>
@@ -619,7 +645,7 @@
             <svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
             Schematic
           </button>
-          <button class="btn btn-info">
+          <button class="btn btn-info" onclick="openInfo('PRJ_002')">
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             More Information
           </button>
@@ -632,7 +658,6 @@
 
 <footer>// end of transmission &mdash; more projects loading</footer>
 
-<!-- ── SCHEMATIC LIGHTBOX ── -->
 <div class="lightbox-overlay" id="lightbox" onclick="handleOverlayClick(event)">
   <div class="lightbox-window" id="lightboxWindow">
     <div class="lightbox-titlebar">
@@ -651,11 +676,49 @@
   </div>
 </div>
 
+<div class="lightbox-overlay" id="infoLightbox" onclick="handleInfoOverlayClick(event)">
+  <div class="lightbox-window info-window">
+    <div class="lightbox-titlebar">
+      <span class="lightbox-title" id="infoLightboxTitle">Project Details</span>
+      <div class="lightbox-controls">
+        <button class="lb-close" onclick="closeInfo()" title="Close">✕</button>
+      </div>
+    </div>
+    <div class="info-content-wrap" id="infoLightboxContent">
+      </div>
+    <div class="lightbox-footer">esc to close window</div>
+  </div>
+</div>
+
 <script>
   let currentZoom = 1;
   const ZOOM_STEP = 0.2;
   const ZOOM_MIN = 0.3;
   const ZOOM_MAX = 4;
+
+  /* Data structures containing the dynamic content */
+  const projectDetails = {
+    'PRJ_001': {
+      title: '8-Step Beat Drum Sequencer | Technical Specs',
+      bullets: [
+        'Designed, programmed, and prototyped an 8-step drum sequencer using Arduino, LEDs, and a Piezo Buzzer.',
+        'Coded multi-dimensional arrays and index structures in C++ to reflect playing position, handle system memory configuration, and manage dynamic note tracking configurations across recording passes.',
+        'Constructed a 4-piece analog drumkit interface utilizing low-pass filters, resistors, and capacitors to tweak real-time acoustic quality, applying an oscilloscope to analyze audio signals.',
+        'Designed custom analog volume and distortion control circuitry leveraging precise potentiometer integration and specialized passive components.'
+      ]
+    },
+    'PRJ_002': {
+      title: 'Binary Arithmetic Logic Unit | Technical Specs',
+      bullets: [
+        'Designed and built a hardware-based Arithmetic Logic Unit (ALU) directly on a custom breadboard matrix capable of driving high-speed binary processing.',
+        'Used KiCAD schematic capture and custom footprints to engineer a reliable multi-layer PCB, implementing calculations to ensure trace safety and optimize thermal dissipation.',
+        'Programmed bare-metal AVR Assembly for the underlying core computational loops, clearing 95% instruction-set test coverage on targeted hardware validation platforms.',
+        'Developed modular C++ liquid crystal display firmware configurations to instantly switch, compute, and visualize binary states to base-10 metrics in real time.',
+        'Integrated cascaded shift registers to dramatically expand hardware I/O boundaries and streamline pin architecture allocations across the MCU framework.',
+        'Configured a tailored micro-joystick directional input interface that reduced command polling latency bounds by up to 40% for rapid execution shifts.'
+      ]
+    }
+  };
 
   function openSchematic(src, title) {
     const overlay = document.getElementById('lightbox');
@@ -678,13 +741,40 @@
     if (e.target === document.getElementById('lightbox')) closeSchematic();
   }
 
+  /* More info window functions */
+  function openInfo(projectId) {
+    const data = projectDetails[projectId];
+    if (!data) return;
+
+    document.getElementById('infoLightboxTitle').textContent = data.title;
+    
+    let htmlContent = '<ul>';
+    data.bullets.forEach(bullet => {
+      htmlContent += `<li>${bullet}</li>`;
+    });
+    htmlContent += '</ul>';
+    
+    document.getElementById('infoLightboxContent').innerHTML = htmlContent;
+    document.getElementById('infoLightbox').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeInfo() {
+    document.getElementById('infoLightbox').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function handleInfoOverlayClick(e) {
+    if (e.target === document.getElementById('infoLightbox')) closeInfo();
+  }
+
   function applyZoom() {
     currentZoom = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, currentZoom));
     document.getElementById('lightboxImg').style.transform = `scale(${currentZoom})`;
   }
 
-  function zoomIn()    { currentZoom += ZOOM_STEP; applyZoom(); }
-  function zoomOut()   { currentZoom -= ZOOM_STEP; applyZoom(); }
+  function zoomIn()   { currentZoom += ZOOM_STEP; applyZoom(); }
+  function zoomOut()  { currentZoom -= ZOOM_STEP; applyZoom(); }
   function zoomReset() { currentZoom = 1; applyZoom(); }
 
   /* scroll-to-zoom inside the image wrap */
@@ -694,9 +784,12 @@
     applyZoom();
   }, { passive: false });
 
-  /* esc to close */
+  /* esc to close all modals */
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeSchematic();
+    if (e.key === 'Escape') {
+      closeSchematic();
+      closeInfo();
+    }
   });
 
   /* drag to pan */
