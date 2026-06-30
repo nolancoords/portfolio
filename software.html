@@ -19,12 +19,12 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   .element-class {
-      scrollbar-width: none;          
-      -ms-overflow-style: none;      
+      scrollbar-width: none;
+      -ms-overflow-style: none;
   }
 
   .element-class::-webkit-scrollbar {
-      display: none;                
+      display: none;
   }
 
   body {
@@ -48,33 +48,31 @@
     pointer-events: none;
   }
 
-  
-.lang-switcher {
-  position: fixed;
-  top: 16px;
-  right: 16px;
-  z-index: 9999;
-  font-family: 'Space Mono', monospace;
-}
+  .lang-switcher {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 9999;
+    font-family: 'Space Mono', monospace;
+  }
 
-.lang-switcher select {
-  background: #0d0d0d;
-  color: #e8e1d4;
-  border: 1px solid #444;
-  font-family: 'Space Mono', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  padding: 6px 24px 6px 10px;
-  cursor: pointer;
-  outline: none;
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 8px center;
-}
-.lang-switcher select:hover { border-color: #e8e1d4; }
-
+  .lang-switcher select {
+    background: #0d0d0d;
+    color: #e8e1d4;
+    border: 1px solid #444;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    padding: 6px 24px 6px 10px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+  }
+  .lang-switcher select:hover { border-color: #e8e1d4; }
 
   .corner-decor {
     position: fixed;
@@ -233,7 +231,7 @@
     display: flex; align-items: center; gap: 0.5rem;
   }
   .back-btn::before { content: '<'; }
-  .back-btn:hover { color: var(--accent); 
+  .back-btn:hover { color: var(--accent);
                   filter: blur(2px)}
 
   .proj-tabs {
@@ -369,7 +367,6 @@
     font-size: 0.58rem; letter-spacing: 0.15em;
     color: var(--accent); text-decoration: none;
     opacity: 0.6; margin-top: 1.2rem;
-    
   }
   .project-link:hover { opacity: 1; }
 
@@ -378,14 +375,12 @@
   .project-bullets {
     list-style: none;
     display: flex; flex-direction: column; gap: 0.75rem;
-
   }
 
   .project-bullets li {
     font-size: clamp(0.75rem, 1vw, 0.82rem);
     color: white; line-height: 1.65;
     padding-left: 1.2rem; position: relative;
-  
   }
 
   .project-bullets li::before {
@@ -423,28 +418,18 @@
   }
   .img-slot:hover, .img-show:hover { border-color: #555; background: #0f0f0f; }
 
-
-  .img-slot:focus { 
+  .img-slot:focus {
     transform: scale(5);
     border: 1px solid #1a1a1a;
     background: #090909;
     border-color: white;
-    
   }
 
-
-
   .img-slot:hover {
-    
-    
-
     transform: translate(20px, -40px) scale(5);
     z-index: 3;
     border: 1px solid #1a1a1a;
     border-color: white;
-
-    
-    
   }
 
   /* Target images inside both static shows and interactive slots */
@@ -454,6 +439,14 @@
     position: absolute; inset: 0;
     z-index: 1;
   }
+
+  /* disabled tabs (placeholder / not yet linked) */
+  .proj-tab.disabled {
+    color: #333;
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  .proj-tab.disabled:hover { color: #333; background: none; filter: none; }
 
   /* ── RESPONSIVE ── */
   @media (max-width: 780px) {
@@ -474,7 +467,6 @@
     <option value="software.html" selected>EN — English</option>
   </select>
 </div>
-
 
 <!-- CORNER DECORATIONS -->
 <div class="corner-decor top-left">
@@ -501,6 +493,7 @@
     &nbsp;&nbsp;<span style="color:#666;">return</span> mvar != 0 ? cov / mvar : 0;<br>
     }
 </div>
+
 <!-- ════════════════════ HOME PAGE ════════════════════ -->
 <div class="page active" id="page-home">
 
@@ -709,15 +702,14 @@
             </div>
           </div>
           <div class="project-images">
-                <div class="img-slot"><img src="quant3.png"></div>
-                <div class="img-slot"><img src="quant1.png"></div>
-                <div class="img-slot"><img src="quant2.png"></div>
-              </div><!-- /project-images -->
-            </div><!-- /project-card -->
-          </div><!-- /project-panel -->   
-        </div><!-- /project-panels -->
-      </div><!-- /section-page -->
-    </div><!-- /page-quant -->
+            <span class="images-label">Screenshots</span>
+            <div class="img-slot"><img src="quant3.png"></div>
+            <div class="img-slot"><img src="quant1.png"></div>
+            <div class="img-slot"><img src="quant2.png"></div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /project-panels -->
   </div>
 </div>
 
@@ -729,7 +721,8 @@
       <button class="back-btn" data-back>Hub</button>
       <div class="proj-tabs" id="tabs-physics">
         <button class="proj-tab active" data-panel="phys-p1"><span class="proj-tab-idx">01</span>Semiconductor Research Engine</button>
-        <button class="proj-tab disabled" data-panel="phys-p2"><span class="proj-tab-idx">01</span>Elastic Collision GUI</button>
+        <button class="proj-tab" data-panel="phys-p2"><span class="proj-tab-idx">02</span>Elastic Collision GUI</button>
+        <button class="proj-tab" data-panel="phys-p3"><span class="proj-tab-idx">03</span>Splash Dynamics Simulator</button>
       </div>
     </div>
 
@@ -739,6 +732,8 @@
     </div>
 
     <div class="project-panels">
+
+      <!-- Panel 1 -->
       <div class="project-panel active" id="phys-p1">
         <div class="project-card">
           <div class="project-card-inner">
@@ -770,9 +765,9 @@
           </div>
         </div>
       </div>
-    </div>
 
-      <div class="project-panel active" id="phys-p2">
+      <!-- Panel 2 -->
+      <div class="project-panel" id="phys-p2">
         <div class="project-card">
           <div class="project-card-inner">
             <div class="project-meta">
@@ -803,8 +798,41 @@
           </div>
         </div>
       </div>
-    </div>
 
+      <!-- Panel 3 -->
+      <div class="project-panel" id="phys-p3">
+        <div class="project-card">
+          <div class="project-card-inner">
+            <div class="project-meta">
+              <div class="project-number">PROJECT_03 // PYTHON + FLUID DYNAMICS</div>
+              <div class="project-name">Splash Dynamics Simulator</div>
+              <div class="project-stack">
+                <span class="stack-tag">Python</span>
+                <span class="stack-tag">Pygame</span>
+                <span class="stack-tag">SciPy</span>
+                <span class="stack-tag">Fluid Dynamics</span>
+                <span class="stack-tag">OOP</span>
+              </div>
+            </div>
+            <div class="project-details">
+              <ul class="project-bullets">
+                <li>Developed an interactive fluid dynamics simulator in Python using Pygame, NumPy, and SciPy, implementing a grid-based Navier–Stokes solver to model real-time fluid flow, diffusion, advection, and pressure projection.</li>
+                <li>Engineered a buoyancy and collision system based on Archimedes' principle, calculating object submersion, drag, and density-dependent floating behavior to accurately simulate interactions between solids and fluids.</li>
+                <li>Designed a dynamic wave-propagation model using spring-mass surface equations to generate realistic splashes, surface disturbances, and water oscillations resulting from object impacts.</li>
+                <li>Optimized numerical physics calculations through vectorized NumPy operations and finite-difference methods, enabling stable real-time simulation and visualization of fluid motion at interactive frame rates.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="project-images">
+            <span class="images-label">Screenshots</span>
+            <div class="img-slot"><img src="splash1.png"></div>
+            <div class="img-slot"><img src="splash2.png"></div>
+            <div class="img-slot"><img src="splash3.png"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </div>
 
@@ -815,8 +843,6 @@
     <div class="section-topbar">
       <button class="back-btn" data-back>Hub</button>
       <div class="proj-tabs" id="tabs-games">
-        <button class="proj-tab active" data-panel="games-p1"><span class="proj-tab-idx">01</span>Galaga++</button>
-        <button class="proj-tab disabled" data-panel="games-p2"><span class="proj-tab-idx">01</span>Tic-Tassembly-Toe</button>
       </div>
     </div>
 
@@ -826,146 +852,56 @@
     </div>
 
     <div class="project-panels">
-      <div class="project-panel active" id="games-p1">
-        <div class="project-card">
-          <div class="project-card-inner">
-            <div class="project-meta">
-              <div class="project-number">Project 1 | Galaga Reimagined in Python</div>
-              <div class="project-name">Galaga++</div>
-              <div class="project-stack">
-                <span class="stack-tag">Python</span>
-                <span class="stack-tag">Pygame</span>
-                <span class="stack-tag">NumPy</span>
-              </div>
-              <a class="project-link" href="https://github.com/Galaga-Enhanced" target="_blank">github.com/Galaga-Enhanced -></a>
-            </div>
-            <div class="project-details">
-              <ul class="project-bullets">
-                <li>Built an expanded reimagining of the 1981 arcade classic in Python and Pygame, introducing new enemy behaviors, a progressive difficulty system, and a strategic area-of-effect weapon.</li>
-                <li>Engineered enemy movement using NumPy arrays to track occupied positions and prevent sprite overlap, with semi-randomized logic that actively repositions enemies relative to the player to discourage static gameplay.</li>
-                <li>Implemented the missile weapon mechanic using a binary search algorithm to efficiently detect and eliminate enemies within a 2×2 impact radius, keeping collision resolution fast even as enemy count scales..</li>
-              </ul>
-            </div>
-          </div>
-          <div class="project-images">
-            <span class="images-label">Screenshots</span>
-            <div class="img-slot"><img src="gal1.png"></div>
-            <div class="img-slot"><img src="gal2.png"></div>
-            <div class="img-slot"><img src="gal3.png"></div>
-          </div>
-        </div>
-      </div>
 
-      <div class="project-panel disabled" id="games-p2">
-        <div class="project-card">
-          <div class="project-card-inner">
-            <div class="project-meta">
-              <div class="project-number">Project 2 | Tic-Tac-Toe in x86 Assembly</div>
-              <div class="project-name">Tic-Tassembly-Toe</div>
-              <div class="project-stack">
-                <span class="stack-tag">Assembly</span>
-                <span class="stack-tag">x86 Assembly</span>
-                <span class="stack-tag">GoLink</span>
-              </div>
-              <a class="project-link" href="https://github.com/nolancoords/Tic-Tassembly-Toe" target="_blank">https://github.com/nolancoords/Tic-Tassembly-Toe -></a>
-            </div>
-            <div class="project-details">
-              <ul class="project-bullets">
-                <li>Because of course we havent seen enough tic-tac-toe games. </li>
-                <li>Used direct 64-bit Assembly registers and raw Windows API bindings by manually orchestrating standard Microsoft fastcall calling conventions (leveraging rcx, rdx, r8, and r9 for sub-routine parameters) achieving high-performance, real-time input processing and a highly responsive Win32 event loop.</li>
-                <li>Used the Windows Graphical Device Interface (GDI) by dynamically allocating device contexts (HDC) and managing manual pixel coordinates achieving custom, fluid rendering of the game board grid, dynamic game state text, and geometric drawing of game pieces without relying on third-party UI engines.</li>
-                <li>Used the specialized GoLink linker by resolving system DLL exports directly (like User32.dll and Gdi32.dll) without bloated Microsoft visual studio SDK import libraries achieving an ultra-lean, highly optimized native executable (.exe) under 5KB with zero external runtime dependencies.</li>
-                <li>Used structured assembly patterns by manually coding stack alignment, branch logic, data sections, and pointer mathematics achieving a robust, bug-free game state engine that flawlessly evaluates winning matrices, tracks board status arrays, and intercepts keyboard hooks.</li>
-              </ul>
-            </div>
-          </div>
-          <div class="project-images">
-            <span class="images-label">Screenshots</span>
-            <div class="img-slot"><img src="tic3.png"></div>
-            <div class="img-slot"><img src="tic2.png"></div>
-          </div>
-        </div>
-      </div>
     </div>
-
   </div>
 </div>
 
 <script>
-  // ── Page navigation
-  let currentPage = 'page-home';
 
-  function goTo(id) {
-    const cur = document.getElementById(currentPage);
-    const nxt = document.getElementById(id);
-    cur.style.opacity = '0';
-    cur.style.transition = 'opacity 0.2s';
-    setTimeout(() => {
-      cur.classList.remove('active');
-      cur.style.opacity = '';
-      cur.style.transition = '';
-      nxt.classList.add('active');
-      nxt.classList.add('fade-in');
-      setTimeout(() => nxt.classList.remove('fade-in'), 350);
-      currentPage = id;
-    }, 180);
-  }
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    const previewId = btn.getAttribute('data-preview');
+    const preview = previewId ? document.getElementById(previewId) : null;
 
-  // Home nav buttons
-  document.querySelectorAll('.nav-btn[data-target]').forEach(btn => {
-    const prevId    = btn.dataset.preview;
-    const targetId  = btn.dataset.target;
-    const panel     = document.getElementById(prevId);
-    if (panel) {
-      btn.addEventListener('mouseenter', () => panel.classList.add('visible'));
-      btn.addEventListener('mouseleave', () => panel.classList.remove('visible'));
-    }
+    btn.addEventListener('mouseenter', () => { if (preview) preview.classList.add('visible'); });
+    btn.addEventListener('mouseleave', () => { if (preview) preview.classList.remove('visible'); });
+
     btn.addEventListener('click', () => {
-      if (panel) panel.classList.remove('visible');
-      goTo(targetId);
+      const targetId = btn.getAttribute('data-target');
+      const target = document.getElementById(targetId);
+      if (!target) return;
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active', 'fade-in'));
+      target.classList.add('active', 'fade-in');
     });
   });
 
-  // Back buttons
+  // ── BACK BUTTONS ──
   document.querySelectorAll('[data-back]').forEach(btn => {
-    btn.addEventListener('click', () => goTo('page-home'));
-  });
-
-  // ── Project tab switching (works for any section)
-  document.querySelectorAll('.proj-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      const panelId  = tab.dataset.panel;
-      const tabsEl   = tab.closest('.proj-tabs');
-      const panelsEl = tab.closest('.section-page').querySelector('.project-panels');
-
-      // deactivate all tabs in this group
-      tabsEl.querySelectorAll('.proj-tab').forEach(t => t.classList.remove('active'));
-      // deactivate all panels in this group
-      panelsEl.querySelectorAll('.project-panel').forEach(p => {
-        p.classList.remove('active');
-        p.scrollTop = 0;
-      });
-
-      tab.classList.add('active');
-      document.getElementById(panelId).classList.add('active');
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active', 'fade-in'));
+      const home = document.getElementById('page-home');
+      home.classList.add('active', 'fade-in');
     });
   });
 
-  // ── Image upload
-  function loadImage(input) {
-    const file = input.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = e => {
-      const slot  = input.closest('.img-slot');
-      const img   = slot.querySelector('img');
-      const label = slot.querySelector('.img-slot-label');
-      img.src = e.target.result;
-      img.classList.add('loaded');
-      label.style.display = 'none';
-    };
-    reader.readAsDataURL(file);
-  }
+
+  document.querySelectorAll('.proj-tabs').forEach(tabGroup => {
+    tabGroup.addEventListener('click', e => {
+      const tab = e.target.closest('.proj-tab');
+      if (!tab || tab.classList.contains('disabled')) return;
+
+      const panelId = tab.getAttribute('data-panel');
+      const panelsContainer = tabGroup.closest('.section-page').querySelector('.project-panels');
+
+      tabGroup.querySelectorAll('.proj-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      panelsContainer.querySelectorAll('.project-panel').forEach(p => p.classList.remove('active'));
+      const panel = document.getElementById(panelId);
+      if (panel) panel.classList.add('active');
+    });
+  });
 </script>
+
 </body>
 </html>
