@@ -832,7 +832,7 @@
         </div>
       </div>
 
-    </div>
+    </div><!-- /project-panels -->
   </div>
 </div>
 
@@ -843,6 +843,8 @@
     <div class="section-topbar">
       <button class="back-btn" data-back>Hub</button>
       <div class="proj-tabs" id="tabs-games">
+        <button class="proj-tab active" data-panel="games-p1"><span class="proj-tab-idx">01</span>Galaga++</button>
+        <button class="proj-tab disabled" data-panel="games-p2"><span class="proj-tab-idx">02</span>Tic-Tassembly-Toe</button>
       </div>
     </div>
 
@@ -852,13 +854,91 @@
     </div>
 
     <div class="project-panels">
+      <div class="project-panel active" id="games-p1">
+        <div class="project-card">
+          <div class="project-card-inner">
+            <div class="project-meta">
+              <div class="project-number">Project 1 | Galaga Reimagined in Python</div>
+              <div class="project-name">Galaga++</div>
+              <div class="project-stack">
+                <span class="stack-tag">Python</span>
+                <span class="stack-tag">Pygame</span>
+                <span class="stack-tag">NumPy</span>
+              </div>
+              <a class="project-link" href="https://github.com/Galaga-Enhanced" target="_blank">github.com/Galaga-Enhanced -></a>
+            </div>
+            <div class="project-details">
+              <ul class="project-bullets">
+                <li>Built an expanded reimagining of the 1981 arcade classic in Python and Pygame, introducing new enemy behaviors, a progressive difficulty system, and a strategic area-of-effect weapon.</li>
+                <li>Engineered enemy movement using NumPy arrays to track occupied positions and prevent sprite overlap, with semi-randomized logic that actively repositions enemies relative to the player to discourage static gameplay.</li>
+                <li>Implemented the missile weapon mechanic using a binary search algorithm to efficiently detect and eliminate enemies within a 2×2 impact radius, keeping collision resolution fast even as enemy count scales..</li>
+              </ul>
+            </div>
+          </div>
+          <div class="project-images">
+            <span class="images-label">Screenshots</span>
+            <div class="img-slot"><img src="gal1.png"></div>
+            <div class="img-slot"><img src="gal2.png"></div>
+            <div class="img-slot"><img src="gal3.png"></div>
+          </div>
+        </div>
+      </div>
 
+      <div class="project-panel" id="games-p2">
+        <div class="project-card">
+          <div class="project-card-inner">
+            <div class="project-meta">
+              <div class="project-number">Project 2 | Tic-Tac-Toe in x86 Assembly</div>
+              <div class="project-name">Tic-Tassembly-Toe</div>
+              <div class="project-stack">
+                <span class="stack-tag">Assembly</span>
+                <span class="stack-tag">x86 Assembly</span>
+                <span class="stack-tag">GoLink</span>
+              </div>
+              <a class="project-link" href="https://github.com/nolancoords/Tic-Tassembly-Toe" target="_blank">https://github.com/nolancoords/Tic-Tassembly-Toe -></a>
+            </div>
+            <div class="project-details">
+              <ul class="project-bullets">
+                <li>Because of course we havent seen enough tic-tac-toe games. </li>
+                <li>Used direct 64-bit Assembly registers and raw Windows API bindings by manually orchestrating standard Microsoft fastcall calling conventions (leveraging rcx, rdx, r8, and r9 for sub-routine parameters) achieving high-performance, real-time input processing and a highly responsive Win32 event loop.</li>
+                <li>Used the Windows Graphical Device Interface (GDI) by dynamically allocating device contexts (HDC) and managing manual pixel coordinates achieving custom, fluid rendering of the game board grid, dynamic game state text, and geometric drawing of game pieces without relying on third-party UI engines.</li>
+                <li>Used the specialized GoLink linker by resolving system DLL exports directly (like User32.dll and Gdi32.dll) without bloated Microsoft visual studio SDK import libraries achieving an ultra-lean, highly optimized native executable (.exe) under 5KB with zero external runtime dependencies.</li>
+                <li>Used structured assembly patterns by manually coding stack alignment, branch logic, data sections, and pointer mathematics achieving a robust, bug-free game state engine that flawlessly evaluates winning matrices, tracks board status arrays, and intercepts keyboard hooks.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="project-images">
+            <span class="images-label">Screenshots</span>
+            <div class="img-slot"><img src="tic3.png"></div>
+            <div class="img-slot"><img src="tic2.png"></div>
+          </div>
+        </div>
+      </div>
     </div>
+
   </div>
 </div>
 
 <script>
+  // ── Page navigation
+  let currentPage = 'page-home';
 
+  function goTo(id) {
+    const cur = document.getElementById(currentPage);
+    const nxt = document.getElementById(id);
+    cur.style.opacity = '0';
+    cur.style.transition = 'opacity 0.2s';
+    setTimeout(() => {
+      cur.classList.remove('active');
+      cur.style.opacity = '';
+      cur.style.transition = '';
+      nxt.classList.add('active');
+      nxt.classList.add('fade-in');
+      currentPage = id;
+    }, 200);
+  }
+
+  // ── NAV BUTTONS (home → section, with preview hover) ──
   document.querySelectorAll('.nav-btn').forEach(btn => {
     const previewId = btn.getAttribute('data-preview');
     const preview = previewId ? document.getElementById(previewId) : null;
@@ -868,23 +948,16 @@
 
     btn.addEventListener('click', () => {
       const targetId = btn.getAttribute('data-target');
-      const target = document.getElementById(targetId);
-      if (!target) return;
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active', 'fade-in'));
-      target.classList.add('active', 'fade-in');
+      if (targetId) goTo(targetId);
     });
   });
 
-  // ── BACK BUTTONS ──
+  // ── BACK BUTTONS (section → home) ──
   document.querySelectorAll('[data-back]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active', 'fade-in'));
-      const home = document.getElementById('page-home');
-      home.classList.add('active', 'fade-in');
-    });
+    btn.addEventListener('click', () => goTo('page-home'));
   });
 
-
+  // ── PROJECT TAB SWITCHING ──
   document.querySelectorAll('.proj-tabs').forEach(tabGroup => {
     tabGroup.addEventListener('click', e => {
       const tab = e.target.closest('.proj-tab');
