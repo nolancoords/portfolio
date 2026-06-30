@@ -728,7 +728,8 @@
     <div class="section-topbar">
       <button class="back-btn" data-back>Hub</button>
       <div class="proj-tabs" id="tabs-physics">
-        <button class="proj-tab active" data-panel="phys-p1"><span class="proj-tab-idx">01</span>Elastic Collision GUI</button>
+        <button class="proj-tab active" data-panel="phys-p1"><span class="proj-tab-idx">01</span>Semiconductor Research Engine</button>
+        <button class="proj-tab disabled" data-panel="phys-p2"><span class="proj-tab-idx">01</span>Elastic Collision GUI</button>
       </div>
     </div>
 
@@ -742,7 +743,40 @@
         <div class="project-card">
           <div class="project-card-inner">
             <div class="project-meta">
-              <div class="project-number">PROJECT_01 // PYTHON + SIM</div>
+              <div class="project-number">PROJECT_01 // C/C++ & QT/Cmake</div>
+              <div class="project-name">Semiconductor Research Engine</div>
+              <div class="project-stack">
+                <span class="stack-tag">C/C++</span>
+                <span class="stack-tag">QT</span>
+                <span class="stack-tag">Cmake</span>
+                <span class="stack-tag">Eigen</span>
+                <span class="stack-tag">MATLAB</span>
+              </div>
+            </div>
+            <div class="project-details">
+              <ul class="project-bullets">
+                <li>Built a cross-platform physics simulation tool in C++17 using Qt 6 with CMake/Ninja build system, implementing velocity Verlet integration for numerically stable Lorentz force stepping.</li>
+                <li>Developed a real-time electromagnetic carrier transport simulator in C++/Qt modeling Lorentz force dynamics, Hall effect, cyclotron motion, and phonon scattering across six semiconductor materials (Si, Ge, GaAs, InP, GaN, ZnO).</li>
+                <li>Implemented drift-diffusion physics including mobility-scaled carrier transport, Maxwell-Boltzmann thermal velocity initialization, and impact ionization thresholding with configurable temperature (77–600 K).</li>
+                <li>Simulated semiconductor carrier transport under EM fields in C++/Qt, modeling cyclotron resonance, Hall voltage, and phonon scattering with six real material datasets.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="project-images">
+            <span class="images-label">Screenshots</span>
+            <div class="img-slot"><img src=""></div>
+            <div class="img-slot"><img src=""></div>
+            <div class="img-slot"><img src=""></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <div class="project-panel active" id="phys-p2">
+        <div class="project-card">
+          <div class="project-card-inner">
+            <div class="project-meta">
+              <div class="project-number">PROJECT_02 // PYTHON + SIM</div>
               <div class="project-name">Elastic Collision GUI</div>
               <div class="project-stack">
                 <span class="stack-tag">Python</span>
