@@ -411,25 +411,22 @@
     border: 1px dashed #242424;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0; cursor: pointer;
-    transition: border-color 0.2s, background 0.2s;
     position: relative; overflow: hidden;
     background: #0a0a0a;
-    transition: transform 0.3s
-  }
-  .img-slot:hover, .img-show:hover { border-color: #555; background: #0f0f0f; }
-
-  .img-slot:focus {
-    transform: scale(5);
-    border: 1px solid #1a1a1a;
-    background: #090909;
-    border-color: white;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s, background 0.2s, box-shadow 0.25s;
   }
 
-  .img-slot:hover {
-    transform: translate(20px, -40px) scale(5);
-    z-index: 3;
-    border: 1px solid #1a1a1a;
-    border-color: white;
+  /* Subtle lift on hover — full expansion now happens in the lightbox on click */
+  .img-slot:hover, .img-show:hover {
+    border-color: var(--accent);
+    background: #0f0f0f;
+    transform: scale(1.08);
+    z-index: 2;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5), 0 0 12px var(--glow);
+  }
+
+  .img-slot:active, .img-show:active {
+    transform: scale(1.02);
   }
 
   /* Target images inside both static shows and interactive slots */
@@ -438,6 +435,72 @@
     object-fit: cover;
     position: absolute; inset: 0;
     z-index: 1;
+  }
+
+  /* ── LIGHTBOX ── */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 5, 5, 0.92);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .lightbox.active { opacity: 1; pointer-events: all; }
+
+  .lightbox-inner {
+    position: relative;
+    max-width: 88vw;
+    max-height: 84vh;
+    border: 1px solid var(--accent);
+    background: #050505;
+    box-shadow: 0 30px 90px rgba(0,0,0,0.7), 0 0 45px var(--glow);
+    transform: scale(0.9);
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+    display: flex;
+  }
+  .lightbox.active .lightbox-inner { transform: scale(1); opacity: 1; }
+
+  .lightbox-inner img {
+    display: block;
+    max-width: 88vw;
+    max-height: 84vh;
+    object-fit: contain;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: -14px; right: -14px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #050505;
+    border: none;
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: transform 0.15s ease;
+  }
+  .lightbox-close:hover { transform: scale(1.12); }
+
+  .lightbox-caption {
+    position: absolute;
+    bottom: -30px; left: 2px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: #666;
+    text-transform: uppercase;
+    white-space: nowrap;
   }
 
   /* disabled tabs (placeholder / not yet linked) */
@@ -759,9 +822,9 @@
           </div>
           <div class="project-images">
             <span class="images-label">Screenshots</span>
-            <div class="img-slot"><img src=""></div>
-            <div class="img-slot"><img src=""></div>
-            <div class="img-slot"><img src=""></div>
+            <div class="img-slot"><img src="Semi1.png"></div>
+            <div class="img-slot"><img src="Semi2.png"></div>
+            <div class="img-slot"><img src="Semi3.png"></div>
           </div>
         </div>
       </div>
@@ -919,6 +982,15 @@
   </div>
 </div>
 
+<!-- ════════════════════ IMAGE LIGHTBOX ════════════════════ -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-inner">
+    <img id="lightbox-img" src="" alt="">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close image">&times;</button>
+    <span class="lightbox-caption" id="lightbox-caption"></span>
+  </div>
+</div>
+
 <script>
   // ── Page navigation
   let currentPage = 'page-home';
@@ -974,6 +1046,35 @@
       if (panel) panel.classList.add('active');
     });
   });
+
+  // ── IMAGE LIGHTBOX (subtle hover handled purely in CSS; click opens full view) ──
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const lightboxCaption = document.getElementById('lightbox-caption');
+  const lightboxClose = document.getElementById('lightbox-close');
+
+  function openLightbox(src, label) {
+    lightboxImg.src = src;
+    lightboxCaption.textContent = label || '';
+    lightbox.classList.add('active');
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+  }
+
+  document.querySelectorAll('.img-slot, .img-show').forEach(slot => {
+    slot.addEventListener('click', () => {
+      const img = slot.querySelector('img');
+      if (!img) return;
+      const projectName = slot.closest('.project-card')?.querySelector('.project-name')?.textContent || '';
+      openLightbox(img.getAttribute('src'), projectName);
+    });
+  });
+
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 </script>
 
 </body>
