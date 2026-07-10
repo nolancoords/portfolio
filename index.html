@@ -65,12 +65,12 @@
   #canvas-quant { z-index: 2; }
   #canvas-led { z-index: 2; }
 
-  /* ── LED CIRCUIT DIAGRAM (Refined styling & elevated z-index) ── */
+  /* ── LED CIRCUIT DIAGRAM ── */
   .circuit-container {
     position: absolute;
     bottom: 2rem;
     right: 2rem;
-    z-index: 100; /* Increased to stay firmly in front of the center navigation */
+    z-index: 100;
     background: #0d0d0d;
     border: 1px solid #333;
     border-radius: 4px;
@@ -113,50 +113,58 @@
     display: block;
   }
 
-  /* LED Glow Animation and states */
-  .led-element {
-    transition: fill 0.1s ease, filter 0.1s ease;
-    z-index: 2;
-  }
-  
+  /* LED Glow Elements (Hidden unless active) */
   .led-glow {
     opacity: 0;
     transition: opacity 0.1s ease;
-    z-index: 0;
   }
 
-  .circuit-container.active .led-element {
-    fill: var(--accent);
-  }
-
+  /* When container is active, the LED component lights up */
   .circuit-container.active .led-glow {
-    opacity: 0.35;
+    opacity: 0.85;
+  }
+  
+  .circuit-container.active .led-wire {
+    stroke: var(--accent);
   }
 
+  /* Clean micro-switch design */
   .circuit-btn {
     position: absolute;
     top: 35%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 22px;
-    height: 22px;
-    border-radius: 4px;
-    background: #1a1a1a;
-    border: 1.5px solid #555;
+    width: 28px;
+    height: 16px;
+    border-radius: 2px;
+    background: #161616;
+    border: 1px solid #444;
     cursor: pointer;
-    color: #888;
+    color: #666;
     font-family: 'Space Mono', monospace;
     font-size: 0.5rem;
     font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
-    letter-spacing: 0.05em;
-    transition: all 0.15s ease;
+    letter-spacing: 0.02em;
+    outline: none;
+    user-select: none;
+    transition: border-color 0.12s ease, color 0.12s ease;
     z-index: 10;
   }
-  .circuit-btn:hover { border-color: var(--accent); color: var(--accent); background: #222; }
-  .circuit-container.active .circuit-btn { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+  .circuit-btn:hover { 
+    border-color: #777; 
+    color: #aaa; 
+  }
+  
+  /* Pressed State - Simple layout shift with no flash variables */
+  .circuit-container.active .circuit-btn { 
+    background: var(--accent); 
+    color: var(--bg); 
+    border-color: var(--accent);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
+  }
 
   /* ── CENTER NAV ── */
   .nav-center {
@@ -312,17 +320,17 @@
   <div class="circuit-header" id="circuit-header"></div>
   <div class="circuit-body">
     <svg class="circuit-svg" width="200" height="150" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
-      <path d="M 40 25 L 100 25 L 100 45" fill="none" stroke="#FFFF" stroke-width="2"/>
-      <path d="M 100 75 L 100 95" fill="none" stroke="#FFFF" stroke-width="2"/>
-      <path d="M 100 115 L 100 135 " fill="none" stroke="#FFFF" stroke-width="2"/>
+      <path d="M 40 25 L 100 25 L 100 45" fill="none" stroke="#666" stroke-width="2" class="led-wire" style="transition: stroke 0.1s;"/>
+      <path d="M 100 75 L 100 95" fill="none" stroke="#666" stroke-width="2" class="led-wire" style="transition: stroke 0.1s;"/>
+      <path d="M 100 115 L 100 135 " fill="none" stroke="#666" stroke-width="2" class="led-wire" style="transition: stroke 0.1s;"/>
 
-      <text x="35" y="24" fill="#FFFF" font-family="Space Mono, monospace" font-size="14">|</text>
-      <text x="120" y="140" fill="#666" font-family="Space Mono, monospace" font-size="9">GND</text>
-      <text x="142" y="62" fill="#888" font-family="Space Mono, monospace" font-size="8">220 Ω</text>
-      <text x="135" y="110" fill="#888" font-family="Space Mono, monospace" font-size="8">LED</text>
+      <text x="35" y="24" fill="#666" font-family="Space Mono, monospace" font-size="14" class="led-wire" style="transition: fill 0.1s;">|</text>
+      <text x="120" y="140" fill="#444" font-family="Space Mono, monospace" font-size="9">GND</text>
+      <text x="142" y="62" fill="#555" font-family="Space Mono, monospace" font-size="8">220 Ω</text>
+      <text x="135" y="110" fill="#555" font-family="Space Mono, monospace" font-size="8">LED</text>
 
-      <circle cx="100" cy="25" r="2" fill="#555" />
-      <circle cx="100" cy="135" r="2" fill="#555" />
+      <circle cx="100" cy="25" r="2" fill="#444" />
+      <circle cx="100" cy="135" r="2" fill="#444" />
 
       <g transform="translate(100, 45)">
         <path d="M 0 0 L 0 5 L -6 8 L 6 12 L -6 16 L 6 20 L -6 24 L 0 27 L 0 30" fill="none" stroke="#e8e4dc" stroke-width="2" stroke-linejoin="miter"/>
@@ -332,10 +340,10 @@
         <path d="M -10 -10 L 10 -10 L 0 10 Z" fill="#222" stroke="#e8e4dc" stroke-width="1.5"/>
         <line x1="-10" y1="10" x2="10" y2="10" stroke="#e8e4dc" stroke-width="2"/>
         
-        <polygon class="led-glow" points="-10 -10,10 0,10 0,10" fill="rgba(200,245,66,1)"  pointer-events="none"/>
-        <polygon class="led-glow" points="0,-20 18,14 -18,14" fill="rgba(200,245,66,1)" filter="url(#glow-blur)" pointer-events="none"/>
+        <polygon class="led-glow" points="-10 -10,10 0,10 0,10" fill="rgba(200,245,66,1)" pointer-events="none"/>
+        <polygon class="led-glow" points="0,-20 18,14 -18,14" fill="rgba(200,245,66,0.4)" filter="url(#glow-blur)" pointer-events="none"/>
         
-        <path d="M -14 2 L -22 -6 M -18 -6 L -22 -6 L -22 -2" fill="none" stroke="#666" stroke-width="1"/>
+        <path d="M -14 2 L -22 -6 M -18 -6 L -22 -6 L -22 -2" fill="none" stroke="#444" stroke-width="1"/>
       </g>
       <g transform="translate(100, 130)">
         <line x1="0" y1="0" x2="0" y2="6" stroke="#e8e4dc" stroke-width="2"/>
@@ -346,15 +354,15 @@
       <g transform="translate(40, 10)">
         <line x1="0" y1="0" x2="0" y2="1" stroke="#e8e4dc" stroke-width="2"/>
         <line x1="-8" y1="0" x2="8" y2="0" stroke="#e8e4dc" stroke-width="2.5"/>
-        <text x="10" y="4" fill="#c8f542" font-family="Space Mono, monospace" font-size="8" font-weight="700">+5V</text>
+        <text x="10" y="4" fill="#555" font-family="Space Mono, monospace" font-size="8" font-weight="700" class="led-wire" style="transition: fill 0.1s;">+5V</text>
       </g>
       <defs>
         <filter id="glow-blur" x="-50%" y="-50%" width="250%" height="250%">
-          <feGaussianBlur stdDeviation="6"/>
+          <feGaussianBlur stdDeviation="5"/>
         </filter>
       </defs>
     </svg>
-    <button class="circuit-btn" id="circuit-switch">⚡</button>
+    <button class="circuit-btn" id="circuit-switch">PWR</button>
   </div>
 </div>
 
